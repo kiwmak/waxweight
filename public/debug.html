@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Auth</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        button { padding: 10px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Authentication</h1>
+    
+    <div>
+        <h3>Token trong localStorage:</h3>
+        <div id="tokenDisplay"></div>
+    </div>
+
+    <div>
+        <h3>Kiểm tra API /api/auth/me:</h3>
+        <button onclick="testAuth()">Test Auth</button>
+        <pre id="authResult"></pre>
+    </div>
+
+    <div>
+        <h3>Actions:</h3>
+        <button onclick="copyToken()">Copy Token</button>
+        <button onclick="clearToken()">Xóa Token</button>
+        <button onclick="goToLogin()">Về Login</button>
+        <button onclick="goToIndex()">Về Index</button>
+    </div>
+
+    <script>
+        function updateTokenDisplay() {
+            const token = localStorage.getItem('token');
+            document.getElementById('tokenDisplay').innerHTML = token ? 
+                `<span class="success">✅ Có token: ${token.substring(0, 50)}...</span>` : 
+                '<span class="error">❌ Không có token</span>';
+        }
+
+        async function testAuth() {
+            const token = localStorage.getItem('token');
+            const result = document.getElementById('authResult');
+            
+            if (!token) {
+                result.innerHTML = '<span class="error">❌ Không có token để test</span>';
+                return;
+            }
+
+            result.innerHTML = 'Đang gọi API...';
+            
+            try {
+                const response = await fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                result.innerHTML = `
+                    <span class="${response.ok ? 'success' : 'error'}">
+                        Status: ${response.status} ${response.statusText}
+                    </span>\n
+                    Data: ${JSON.stringify(data, null, 2)}
+                `;
+            } catch (err) {
+                result.innerHTML = `<span class="error">Lỗi: ${err.message}</span>`;
+            }
+        }
+
+        function copyToken() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                navigator.clipboard.writeText(token);
+                alert('Đã copy token!');
+            } else {
+                alert('Không có token!');
+            }
+        }
+
+        function clearToken() {
+            localStorage.removeItem('token');
+            updateTokenDisplay();
+            alert('Đã xóa token!');
+        }
+
+        function goToLogin() {
+            window.location.href = '/login.html';
+        }
+
+        function goToIndex() {
+            window.location.href = '/';
+        }
+
+        // Cập nhật hiển thị khi load
+        updateTokenDisplay();
+    </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 {
   "name": "wax-management",
-  "version": "1.0.0",
-  "description": "Quản lý trọng lượng sáp nến",
+  "version": "2.0.0",
+  "description": "Quản lý trọng lượng sáp nến - Pro Version",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -10,10 +10,14 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.38.0",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
