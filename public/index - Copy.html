@@ -7,7 +7,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Quản lý trọng lượng Sáp Nến Pro</title>
     <style>
-        /* Giữ nguyên toàn bộ CSS (đã có ở các phiên bản trước) */
         * {
             margin: 0;
             padding: 0;
@@ -523,7 +522,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
-            min-width: 1000px; /* Giảm bớt do bỏ 1 cột */
+            min-width: 1200px;
         }
 
         th, td {
@@ -602,11 +601,12 @@
         .net-weight-1 input { background: #FFF3E0; }
         .net-weight-2 input { background: #E3F2FD; }
         .difference-cell input { background: #F3E5F5; }
-        /* Xóa class percent-cell */
+        .percent-cell input { background: #E8F5E9; }
 
         .dark-mode .net-weight-1 input { background: #5d4a2e; }
         .dark-mode .net-weight-2 input { background: #2a4a5d; }
         .dark-mode .difference-cell input { background: #4a2e5d; }
+        .dark-mode .percent-cell input { background: #2e5d2e; }
 
         .total-row {
             background: #e8f5e9 !important;
@@ -830,22 +830,6 @@
         .dark-mode .save-time {
             color: #bbb;
         }
-
-        /* Info message for user */
-        .info-message {
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 10px 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 14px;
-            animation: slideDown 0.3s ease;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
     </style>
 </head>
 <body>
@@ -858,25 +842,25 @@
     <div class="container">
         <h1>📋 QUẢN LÝ TRỌNG LƯỢNG SÁP NẾN PRO</h1>
 
-        <!-- HEADER với thông tin user -->
         <div class="header">
-            <div class="user-info">
-                <div class="user-detail" id="userInfo">
-                    <span class="user-avatar">👤</span>
-                    <span>Đang tải...</span>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button class="btn btn-admin" id="adminBtn" onclick="goToAdminPage()" style="display: none;">
-                    <span>👥</span>
-                    Quản lý users
-                </button>
-                <button class="btn btn-secondary" onclick="logout()">
-                    <span>🚪</span>
-                    Đăng xuất
-                </button>
-            </div>
+    <div class="user-info">
+        <div class="user-detail" id="userInfo">
+            <span class="user-avatar">👤</span>
+            <span>Đang tải...</span>
         </div>
+    </div>
+    <div class="header-actions">
+        <button class="btn btn-admin" id="adminBtn" onclick="goToAdminPage()" style="display: none;">
+            <span>👥</span>
+            Quản lý users
+        </button>
+        <button class="btn btn-secondary" onclick="logout()">
+            <span>🚪</span>
+            Đăng xuất
+        </button>
+    </div>
+</div>
+
 
         <!-- ORDER PANEL -->
         <div class="order-panel">
@@ -941,9 +925,9 @@
             </div>
         </div>
 
-        <!-- FORMULA INFO (đã bỏ công thức % chênh) -->
+        <!-- FORMULA INFO -->
         <div style="background:#fff3e0; padding:15px; border-radius:16px; margin-bottom:20px;">
-            <p><strong>📐 Công thức:</strong> Sáp lần 1 = Rót 1 - Cốc không ; Sáp lần 2 = Rót 2 - Cốc không ; Lượt 2 rót = Rót 2 - Rót 1</p>
+            <p><strong>📐 Công thức:</strong> Sáp lần 1 = Rót 1 - Cốc không ; Sáp lần 2 = Rót 2 - Cốc không ; % chênh = (Rót 2 - Rót 1)/Sáp 1 * 100%</p>
         </div>
 
         <!-- CONTROLS -->
@@ -955,19 +939,27 @@
             <button id="copyAllBtn">📋 Sao chép</button>
         </div>
 
-        <!-- STATS (đã bỏ % chênh) -->
+        <!-- STATS -->
         <div class="stats">
             <div class="stat-box" onclick="copyToClipboard(document.getElementById('totalSamples').textContent)">
                 <h3>Tổng mẫu</h3>
                 <div class="stat-value" id="totalSamples">0</div>
             </div>
+            <div class="stat-box" onclick="copyToClipboard(document.getElementById('avgPercentStat').textContent)">
+                <h3>TB % chênh</h3>
+                <div class="stat-value" id="avgPercentStat">0%</div>
+            </div>
             <div class="stat-box" onclick="copyToClipboard(document.getElementById('totalWaxWeight').textContent)">
                 <h3>Tổng sáp (g)</h3>
                 <div class="stat-value" id="totalWaxWeight">0g</div>
             </div>
-            <div class="stat-box" onclick="copyToClipboard(document.getElementById('totalDifference').textContent)">
-                <h3>Tổng chênh (g)</h3>
-                <div class="stat-value" id="totalDifferenceStat">0g</div>
+            <div class="stat-box" onclick="copyToClipboard(document.getElementById('minPercent').textContent)">
+                <h3>Min %</h3>
+                <div class="stat-value" id="minPercent">0%</div>
+            </div>
+            <div class="stat-box" onclick="copyToClipboard(document.getElementById('maxPercent').textContent)">
+                <h3>Max %</h3>
+                <div class="stat-value" id="maxPercent">0%</div>
             </div>
         </div>
 
@@ -979,7 +971,7 @@
             <p id="progressText"></p>
         </div>
 
-        <!-- DATA TABLE (đã bỏ cột % chênh) -->
+        <!-- DATA TABLE -->
         <div class="table-wrapper">
             <table id="dataTable">
                 <thead>
@@ -991,6 +983,7 @@
                         <th>Rót lần 2 (g)</th>
                         <th>Sáp lần 2 (g)</th>
                         <th>Lượt 2 rót (g)</th>
+                        <th>% Chênh</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -1003,6 +996,7 @@
                         <td><input type="text" id="totalSecondPour" readonly></td>
                         <td><input type="text" id="totalNetWax2" readonly></td>
                         <td><input type="text" id="totalDifference" readonly></td>
+                        <td><input type="text" id="totalPercent" readonly></td>
                         <td></td>
                     </tr>
                     <tr class="total-row">
@@ -1012,15 +1006,16 @@
                         <td><input type="text" id="avgSecondPour" readonly></td>
                         <td><input type="text" id="avgNetWax2" readonly></td>
                         <td><input type="text" id="avgDifference" readonly></td>
+                        <td><input type="text" id="avgPercent" readonly></td>
                         <td></td>
                     </tr>
                 </tfoot>
             </table>
         </div>
 
-        <!-- CHART SECTION (có thể giữ hoặc bỏ, nhưng nếu giữ thì cần sửa) -->
+        <!-- CHART SECTION -->
         <div class="chart-container" id="chartContainer" style="display: none;">
-            <canvas id="waxChart"></canvas>
+            <canvas id="percentChart"></canvas>
         </div>
 
         <!-- FOOTER -->
@@ -1123,50 +1118,6 @@
         }
 
         // ==================== AUTH FUNCTIONS ====================
-        async function checkPermissions() {
-            const token = localStorage.getItem('token');
-            if (!token) return false;
-            try {
-                const response = await fetch('/api/auth/me', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (!response.ok) return false;
-                const data = await response.json();
-                return data.user.role === 'admin';
-            } catch (error) {
-                console.error('Check permissions error:', error);
-                return false;
-            }
-        }
-
-        async function updateUIBasedOnRole() {
-            const isAdmin = await checkPermissions();
-            
-            const newOrderBtn = document.getElementById('newOrderBtn');
-            const deleteOrderBtn = document.getElementById('deleteOrderBtn');
-            const adminBtn = document.getElementById('adminBtn');
-            
-            if (newOrderBtn) newOrderBtn.style.display = isAdmin ? 'flex' : 'none';
-            if (deleteOrderBtn) deleteOrderBtn.style.display = isAdmin ? 'flex' : 'none';
-            if (adminBtn) adminBtn.style.display = isAdmin ? 'inline-flex' : 'none';
-            
-            if (!isAdmin) {
-                // Hiển thị thông báo chế độ xem
-                if (!document.querySelector('.info-message')) {
-                    const infoDiv = document.createElement('div');
-                    infoDiv.className = 'info-message';
-                    infoDiv.innerHTML = '🔍 Bạn đang ở chế độ xem. Chỉ admin mới có thể tạo hoặc xóa đơn hàng.';
-                    const container = document.querySelector('.order-panel');
-                    if (container) {
-                        container.insertBefore(infoDiv, container.firstChild);
-                    }
-                }
-            } else {
-                const infoMsg = document.querySelector('.info-message');
-                if (infoMsg) infoMsg.remove();
-            }
-        }
-
         async function checkAuth() {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -1176,7 +1127,9 @@
 
             try {
                 const response = await fetch('/api/auth/me', {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
 
                 if (!response.ok) {
@@ -1189,15 +1142,17 @@
                 currentUser = data.user;
                 
                 const userInfo = document.getElementById('userInfo');
-                if (userInfo) {
-                    userInfo.innerHTML = `
-                        <span class="user-avatar">${currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : 'U'}</span>
-                        <span>${currentUser.fullName || currentUser.username} (${currentUser.role === 'admin' ? 'Admin' : 'User'})</span>
-                    `;
-                }
+                userInfo.innerHTML = `
+                    <span class="user-avatar">${currentUser.fullName.charAt(0).toUpperCase()}</span>
+                    <span>${currentUser.fullName} (${currentUser.role === 'admin' ? 'Admin' : 'User'})</span>
+                `;
                 
-                await updateUIBasedOnRole();
+                // Hiển thị nút admin nếu là admin
+                if (currentUser.role === 'admin') {
+                    document.getElementById('adminBtn').style.display = 'inline-flex';
+                }
 
+                // Load data sau khi xác thực
                 initializeRows();
                 calculateAll();
                 fetchOrders();
@@ -1206,29 +1161,24 @@
 
             } catch (error) {
                 console.error('Auth check error:', error);
-                localStorage.removeItem('token');
-                window.location.href = '/login.html';
+                showToast('Lỗi xác thực', 'error');
             }
         }
 
         async function logout() {
             const token = localStorage.getItem('token');
             try {
-                if (token) {
-                    await fetch('/api/auth/logout', {
-                        method: 'POST',
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                }
+                await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
             } catch (error) {
                 console.error('Logout error:', error);
             }
             localStorage.removeItem('token');
             window.location.href = '/login.html';
-        }
-
-        function goToAdminPage() {
-            window.location.href = '/admin/users.html';
         }
 
         // ==================== TABLE FUNCTIONS ====================
@@ -1351,7 +1301,19 @@
             diffCell.appendChild(diffInput);
             row.appendChild(diffCell);
 
-            // Actions (xóa)
+            // Percent
+            const percentCell = document.createElement('td');
+            percentCell.className = 'percent-cell';
+            const percentInput = document.createElement('input');
+            percentInput.type = 'text';
+            percentInput.className = 'percent';
+            percentInput.dataset.row = rowNumber;
+            percentInput.readOnly = true;
+            percentInput.placeholder = '0%';
+            percentCell.appendChild(percentInput);
+            row.appendChild(percentCell);
+
+            // Actions
             const actionCell = document.createElement('td');
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = '✕ Xóa';
@@ -1394,11 +1356,10 @@
             const data = [];
             rows.forEach(row => {
                 const inputs = row.querySelectorAll('input');
-                // Lấy theo thứ tự: emptyCup, firstPour, secondPour
                 data.push({
                     emptyCup: inputs[0].value,
                     firstPour: inputs[1].value,
-                    secondPour: inputs[3].value  // inputs[2] là netWax1, inputs[4] là netWax2
+                    secondPour: inputs[3].value
                 });
             });
             return data;
@@ -1429,6 +1390,7 @@
             const net1 = document.querySelector(`.net-wax-1[data-row="${rowIndex}"]`);
             const net2 = document.querySelector(`.net-wax-2[data-row="${rowIndex}"]`);
             const diff = document.querySelector(`.difference[data-row="${rowIndex}"]`);
+            const pct = document.querySelector(`.percent[data-row="${rowIndex}"]`);
 
             if (!empty || !first || !second) return;
 
@@ -1444,6 +1406,12 @@
 
             const diffVal = c - b;
             diff.value = diffVal !== 0 ? diffVal.toFixed(2) : '';
+
+            let percentVal = '';
+            if (wax1 > 0 && c > 0) {
+                percentVal = ((diffVal / wax1) * 100).toFixed(2) + '%';
+            }
+            pct.value = percentVal;
         }
 
         function calculateAll() {
@@ -1452,8 +1420,9 @@
         }
 
         function calculateTotals() {
-            let sumFirst = 0, sumNet1 = 0, sumSecond = 0, sumNet2 = 0, sumDiff = 0;
-            let countFilled = 0;
+            let sumFirst = 0, sumNet1 = 0, sumSecond = 0, sumNet2 = 0, sumDiff = 0, sumPct = 0;
+            let countPct = 0, countFilled = 0;
+            let minPct = 100, maxPct = -100;
 
             for (let i = 1; i <= rowCount; i++) {
                 const empty = parseFloat(document.querySelector(`.empty-cup[data-row="${i}"]`)?.value) || 0;
@@ -1462,6 +1431,7 @@
                 const second = parseFloat(document.querySelector(`.second-pour[data-row="${i}"]`)?.value) || 0;
                 const net2 = parseFloat(document.querySelector(`.net-wax-2[data-row="${i}"]`)?.value) || 0;
                 const diff = parseFloat(document.querySelector(`.difference[data-row="${i}"]`)?.value) || 0;
+                const pct = document.querySelector(`.percent[data-row="${i}"]`)?.value || '';
 
                 sumFirst += first;
                 sumNet1 += net1;
@@ -1469,6 +1439,13 @@
                 sumNet2 += net2;
                 sumDiff += diff;
 
+                if (pct) {
+                    const p = parseFloat(pct.replace('%', '')) || 0;
+                    sumPct += p;
+                    countPct++;
+                    if (p < minPct) minPct = p;
+                    if (p > maxPct) maxPct = p;
+                }
                 if (empty > 0 && first > 0) countFilled++;
             }
 
@@ -1477,6 +1454,7 @@
             document.getElementById('totalSecondPour').value = sumSecond.toFixed(2);
             document.getElementById('totalNetWax2').value = sumNet2.toFixed(2);
             document.getElementById('totalDifference').value = sumDiff.toFixed(2);
+            document.getElementById('totalPercent').value = countPct ? (sumPct / countPct).toFixed(2) + '%' : '';
 
             const avgCount = countFilled || 1;
             document.getElementById('avgFirstPour').value = (sumFirst / avgCount).toFixed(2);
@@ -1484,22 +1462,82 @@
             document.getElementById('avgSecondPour').value = (sumSecond / avgCount).toFixed(2);
             document.getElementById('avgNetWax2').value = (sumNet2 / avgCount).toFixed(2);
             document.getElementById('avgDifference').value = (sumDiff / avgCount).toFixed(2);
+            document.getElementById('avgPercent').value = countPct ? (sumPct / countPct).toFixed(2) + '%' : '';
 
             return {
                 totalSamples: countFilled,
+                avgPercent: countPct ? sumPct / countPct : 0,
                 totalWaxWeight: sumNet1 + sumNet2,
-                totalDifference: sumDiff
+                minPercent: countPct ? minPct : 0,
+                maxPercent: countPct ? maxPct : 0
             };
         }
 
         function updateStats() {
             const stats = calculateTotals();
             document.getElementById('totalSamples').textContent = stats.totalSamples;
+            document.getElementById('avgPercentStat').textContent = stats.avgPercent.toFixed(2) + '%';
             document.getElementById('totalWaxWeight').textContent = stats.totalWaxWeight.toFixed(2) + 'g';
-            document.getElementById('totalDifferenceStat').textContent = stats.totalDifference.toFixed(2) + 'g';
+            document.getElementById('minPercent').textContent = stats.minPercent.toFixed(2) + '%';
+            document.getElementById('maxPercent').textContent = stats.maxPercent.toFixed(2) + '%';
             
-            // Có thể cập nhật chart nếu muốn, nhưng tạm thời bỏ qua
-            // updateChart();
+            updateChart();
+        }
+
+        // ==================== CHART FUNCTIONS ====================
+        function updateChart() {
+            const percentData = [];
+            for (let i = 1; i <= rowCount; i++) {
+                const pct = document.querySelector(`.percent[data-row="${i}"]`)?.value || '';
+                if (pct) {
+                    percentData.push(parseFloat(pct.replace('%', '')));
+                }
+            }
+
+            if (percentData.length === 0) {
+                document.getElementById('chartContainer').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('chartContainer').style.display = 'block';
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            const ctx = document.getElementById('percentChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: percentData.map((_, i) => `Mẫu ${i + 1}`),
+                    datasets: [{
+                        label: '% Chênh lệch',
+                        data: percentData,
+                        backgroundColor: '#4CAF50',
+                        borderColor: '#2E7D32',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Phần trăm (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: document.body.classList.contains('dark-mode') ? '#fff' : '#666'
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         // ==================== AUTO SAVE ====================
@@ -1551,7 +1589,9 @@
             try {
                 const token = localStorage.getItem('token');
                 const response = await fetch(`${API_BASE}/api/orders/search?keyword=${encodeURIComponent(searchTerm)}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
                 const searchResults = await response.json();
                 
@@ -1639,7 +1679,9 @@
                 if (toDate) url += `toDate=${toDate}`;
                 
                 const response = await fetch(url, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
                 const results = await response.json();
                 
@@ -1736,7 +1778,9 @@
             try {
                 const token = localStorage.getItem('token');
                 const res = await fetch(`${API_BASE}/api/orders`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
                 
                 if (res.status === 401) {
@@ -1767,7 +1811,9 @@
             try {
                 const token = localStorage.getItem('token');
                 const res = await fetch(`${API_BASE}/api/orders/${orderId}/products`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
                 const products = await res.json();
                 
@@ -1803,12 +1849,6 @@
         }
 
         async function createOrder() {
-            // Chỉ admin mới được gọi, nhưng đã được ẩn nút, để an toàn kiểm tra lại
-            const isAdmin = await checkPermissions();
-            if (!isAdmin) {
-                showToast('Bạn không có quyền tạo đơn hàng', 'error');
-                return;
-            }
             const orderCode = orderCodeInput.value.trim();
             if (!orderCode) {
                 showToast('Vui lòng nhập mã đơn hàng!', 'warning');
@@ -1885,7 +1925,9 @@
                 const token = localStorage.getItem('token');
                 const res = await fetch(`${API_BASE}/api/products/${productId}`, {
                     method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
                 const result = await res.json();
                 if (result.success) {
@@ -1936,7 +1978,7 @@
                     const inputs = newRow.querySelectorAll('input');
                     inputs[0].value = row.emptyCup || '';
                     inputs[1].value = row.firstPour || '';
-                    inputs[3].value = row.secondPour || ''; // inputs[2] là netWax1, inputs[4] là netWax2
+                    inputs[3].value = row.secondPour || '';
                 });
                 rowCount = data.rows.length;
                 updateRowNumbers();
@@ -1949,7 +1991,9 @@
             try {
                 const token = localStorage.getItem('token');
                 const res = await fetch(`${API_BASE}/api/products/${productId}/data`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
                 if (!res.ok) throw new Error('Lỗi tải');
                 const data = await res.json();
@@ -2020,11 +2064,6 @@
         }
 
         async function deleteOrder() {
-            const isAdmin = await checkPermissions();
-            if (!isAdmin) {
-                showToast('Bạn không có quyền xóa đơn hàng', 'error');
-                return;
-            }
             const orderId = orderSelect.value;
             if (!orderId) {
                 showToast('Vui lòng chọn đơn hàng!', 'warning');
@@ -2037,7 +2076,9 @@
                 const token = localStorage.getItem('token');
                 const res = await fetch(`${API_BASE}/api/orders/${orderId}`, { 
                     method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
                 const result = await res.json();
                 if (result.success) {
@@ -2067,17 +2108,16 @@
             let csv = `Mã đơn hàng,${orderCodeInput.value || ''}\n`;
             csv += `Mã hàng,${productCode}\n`;
             csv += `Ngày xuất,${new Date().toLocaleString('vi-VN')}\n\n`;
-            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Sáp lần2 (g),Chênh lệch (g)\n";
+            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Sáp lần2 (g),Chênh lệch (g),% Chênh lệch\n";
 
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
-                // inputs: [0] emptyCup, [1] firstPour, [2] netWax1, [3] secondPour, [4] netWax2, [5] diff
-                csv += `${idx+1},${inputs[0].value || ''},${inputs[1].value || ''},${inputs[2].value || ''},${inputs[3].value || ''},${inputs[4].value || ''},${inputs[5].value || ''}\n`;
+                csv += `${idx+1},${inputs[0].value || ''},${inputs[1].value || ''},${inputs[2].value || ''},${inputs[3].value || ''},${inputs[4].value || ''},${inputs[5].value || ''},${inputs[6].value || ''}\n`;
             });
 
             csv += `\nTổng mẫu,${document.getElementById('totalSamples').textContent}\n`;
+            csv += `TB % chênh,${document.getElementById('avgPercentStat').textContent}\n`;
             csv += `Tổng sáp,${document.getElementById('totalWaxWeight').textContent}\n`;
-            csv += `Tổng chênh,${document.getElementById('totalDifferenceStat').textContent}\n`;
 
             const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -2095,17 +2135,17 @@
             text += `MÃ HÀNG: ${productCode}\n`;
             text += `THỜI GIAN: ${new Date().toLocaleString('vi-VN')}\n\n`;
             
-            text += "STT\tCốc không\tRót 1\tSáp 1\tRót 2\tSáp 2\tChênh lệch\n";
+            text += "STT\tCốc không\tRót 1\tSáp 1\tRót 2\tSáp 2\tChênh lệch\t%\n";
             
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
-                text += `${idx+1}\t${inputs[0].value || '0'}\t${inputs[1].value || '0'}\t${inputs[2].value || '0'}\t${inputs[3].value || '0'}\t${inputs[4].value || '0'}\t${inputs[5].value || '0'}\n`;
+                text += `${idx+1}\t${inputs[0].value || '0'}\t${inputs[1].value || '0'}\t${inputs[2].value || '0'}\t${inputs[3].value || '0'}\t${inputs[4].value || '0'}\t${inputs[5].value || '0'}\t${inputs[6].value || '0%'}\n`;
             });
             
             text += `\nTỔNG KẾT:\n`;
             text += `- Tổng mẫu: ${document.getElementById('totalSamples').textContent}\n`;
+            text += `- TB % chênh: ${document.getElementById('avgPercentStat').textContent}\n`;
             text += `- Tổng sáp: ${document.getElementById('totalWaxWeight').textContent}\n`;
-            text += `- Tổng chênh: ${document.getElementById('totalDifferenceStat').textContent}\n`;
             
             copyToClipboard(text);
         }
@@ -2130,6 +2170,10 @@
             const btn = document.getElementById('themeToggle');
             btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
             localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+            
+            if (chart) {
+                updateChart();
+            }
         }
 
         // ==================== KEYBOARD SHORTCUTS ====================
@@ -2203,7 +2247,9 @@
                 
                 const token = localStorage.getItem('token');
                 fetch(`${API_BASE}/api/orders/${this.value}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 })
                     .then(res => res.json())
                     .then(data => {
@@ -2213,12 +2259,131 @@
         });
 
         // ==================== INITIALIZATION ====================
+        // Kiểm tra đăng nhập trước
         checkAuth();
 
+        // Load theme preference
         if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark-mode');
             document.getElementById('themeToggle').textContent = '☀️';
         }
     </script>
+
+<script>
+    // ==================== AUTH FUNCTIONS ====================
+    
+    // Kiểm tra token ngay khi load trang
+    (function() {
+        console.log('🔍 Kiểm tra token khi load trang...');
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            console.log('❌ Không tìm thấy token, chuyển về login');
+            window.location.href = '/login.html';
+            return;
+        }
+        
+        console.log('✅ Có token:', token.substring(0, 20) + '...');
+    })();
+
+    // Hàm kiểm tra auth và lấy thông tin user
+    async function checkAuth() {
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            window.location.href = '/login.html';
+            return;
+        }
+
+        try {
+            console.log('📡 Gọi API /api/auth/me với token:', token.substring(0, 20) + '...');
+            
+            const response = await fetch('/api/auth/me', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('📥 Response status:', response.status);
+
+            if (!response.ok) {
+                console.log('❌ Token không hợp lệ, xóa và chuyển về login');
+                localStorage.removeItem('token');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const data = await response.json();
+            console.log('✅ User data:', data.user);
+            
+            currentUser = data.user;
+            
+            // Hiển thị thông tin user
+            const userInfo = document.getElementById('userInfo');
+            if (userInfo) {
+                userInfo.innerHTML = `
+                    <span class="user-avatar">${currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : 'U'}</span>
+                    <span>${currentUser.fullName || currentUser.username} (${currentUser.role === 'admin' ? 'Admin' : 'User'})</span>
+                `;
+            }
+            
+            // Hiển thị nút admin nếu là admin
+            const adminBtn = document.getElementById('adminBtn');
+            if (adminBtn) {
+                adminBtn.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+            }
+
+            // Load data sau khi xác thực thành công
+            initializeRows();
+            calculateAll();
+            fetchOrders();
+            displayLANIPs();
+            addQuickFilters();
+
+        } catch (error) {
+            console.error('❌ Auth check error:', error);
+            localStorage.removeItem('token');
+            window.location.href = '/login.html';
+        }
+    }
+
+    // Hàm đăng xuất
+    async function logout() {
+        const token = localStorage.getItem('token');
+        
+        try {
+            if (token) {
+                await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+        
+        // Xóa token và chuyển về login
+        localStorage.removeItem('token');
+        console.log('🚪 Đã đăng xuất, chuyển về login');
+        window.location.href = '/login.html';
+    }
+
+    // Hàm chuyển đến trang admin
+    function goToAdminPage() {
+        window.location.href = '/admin/users.html';
+    }
+
+    // Gọi checkAuth sau khi DOM load
+    document.addEventListener('DOMContentLoaded', function() {
+        checkAuth();
+    });
+
+    // ==================== CÁC HÀM KHÁC GIỮ NGUYÊN ====================
+    // (Giữ nguyên tất cả các hàm createRow, calculate, fetchOrders,...)
+</script>
 </body>
 </html>
