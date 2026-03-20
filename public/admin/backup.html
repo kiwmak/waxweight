@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Backup - Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-primary:hover { background: #45a049; transform: translateY(-2px); }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+        .btn-danger:hover { background: #d32f2f; }
+
+        .btn-secondary {
+            background: #9e9e9e;
+            color: white;
+        }
+        .btn-secondary:hover { background: #757575; }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .backup-list {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .backup-list th, .backup-list td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .backup-list th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .backup-list tr:hover {
+            background: #f5f5f5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .action-btn.download { background: #2196F3; color: white; }
+        .action-btn.delete { background: #f44336; color: white; }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+        .toast {
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+        .toast.success { background: #4CAF50; }
+        .toast.error { background: #f44336; }
+        .toast.info { background: #2196F3; }
+        .toast.warning { background: #FF9800; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            padding: 20px;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            font-family: inherit;
+        }
+        .restore-warning {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        input[type="file"] {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>💾 Quản lý Backup Dữ liệu</h1>
+            <div>
+                <button class="btn btn-primary" onclick="openCreateBackupModal()">➕ Tạo Backup mới</button>
+                <button class="btn btn-secondary" onclick="window.location.href='/'">🏠 Về trang chính</button>
+            </div>
+        </div>
+
+        <!-- Thống kê -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <h3>Tổng số backup</h3>
+                <div class="stat-value" id="totalBackups">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Tổng dung lượng</h3>
+                <div class="stat-value" id="totalSize">0 MB</div>
+            </div>
+            <div class="stat-card">
+                <h3>Backup gần nhất</h3>
+                <div class="stat-value" id="lastBackup">Chưa có</div>
+            </div>
+        </div>
+
+        <!-- Danh sách backup -->
+        <div class="card">
+            <h3 style="margin-bottom: 15px;">📋 Danh sách Backup</h3>
+            <div style="overflow-x: auto;">
+                <table class="backup-list">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên file</th>
+                            <th>Kích thước</th>
+                            <th>Ngày tạo</th>
+                            <th>Người tạo</th>
+                            <th>Mô tả</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="backupListBody">
+                        <tr><td colspan="7" style="text-align:center;">Đang tải...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Khôi phục dữ liệu -->
+        <div class="card">
+            <h3>🔄 Khôi phục từ file backup</h3>
+            <div class="restore-warning">
+                ⚠️ <strong>Cảnh báo:</strong> Khôi phục sẽ <strong>thay thế toàn bộ dữ liệu hiện tại</strong> (đơn hàng, sản phẩm, dữ liệu sáp) bằng dữ liệu trong file backup. 
+                Hành động này không thể hoàn tác. Hãy chắc chắn bạn đã tạo backup trước khi thực hiện.
+            </div>
+            <form id="restoreForm" onsubmit="return false;">
+                <div style="margin-bottom: 15px;">
+                    <label>Chọn file backup (.json):</label>
+                    <input type="file" id="restoreFile" accept=".json" style="margin-top: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label>Chế độ khôi phục:</label>
+                    <select id="restoreMode" style="padding: 8px; border-radius: 8px; border: 1px solid #ddd;">
+                        <option value="replace">Thay thế (xóa dữ liệu cũ)</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-danger" onclick="restoreBackup()">⚠️ KHÔI PHỤC DỮ LIỆU</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal tạo backup -->
+    <div class="modal" id="createBackupModal">
+        <div class="modal-content">
+            <h2>📦 Tạo Backup mới</h2>
+            <label>Mô tả (tùy chọn):</label>
+            <textarea id="backupDescription" rows="3" placeholder="Nhập mô tả cho backup này..."></textarea>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                <button class="btn btn-primary" onclick="createBackup()">Tạo Backup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== UTILITIES ====================
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function showToast(message, type = 'info', duration = 3000) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            return new Date(dateString).toLocaleString('vi-VN');
+        }
+
+        // ==================== AUTH CHECK ====================
+        async function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login.html';
+                return false;
+            }
+            try {
+                const res = await fetch('/api/auth/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('Unauthorized');
+                const data = await res.json();
+                if (data.user.role !== 'admin') {
+                    showToast('Bạn không có quyền truy cập', 'error');
+                    setTimeout(() => window.location.href = '/', 2000);
+                    return false;
+                }
+                return true;
+            } catch (err) {
+                localStorage.removeItem('token');
+                window.location.href = '/login.html';
+                return false;
+            }
+        }
+
+        // ==================== LOAD BACKUPS ====================
+        async function loadBackups() {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch('/api/admin/backups', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('Failed to load backups');
+                const backups = await res.json();
+                renderBackups(backups);
+                updateStats(backups);
+            } catch (err) {
+                console.error(err);
+                showToast('Lỗi tải danh sách backup', 'error');
+                document.getElementById('backupListBody').innerHTML = '<tr><td colspan="7" style="text-align:center;">Không thể tải dữ liệu</td></tr>';
+            }
+        }
+
+        function renderBackups(backups) {
+            const tbody = document.getElementById('backupListBody');
+            if (!backups || backups.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Chưa có backup nào</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = backups.map(backup => `
+                <tr>
+                    <td>${backup.id}</td>
+                    <td>${backup.filename}</td>
+                    <td>${formatBytes(backup.size || 0)}</td>
+                    <td>${formatDate(backup.created_at)}</td>
+                    <td>${backup.created_by_user?.username || 'N/A'}</td>
+                    <td>${backup.description || ''}</td>
+                    <td class="action-buttons">
+                        <button class="action-btn download" onclick="downloadBackup(${backup.id})">📥 Tải xuống</button>
+                        <button class="action-btn delete" onclick="deleteBackup(${backup.id})">🗑️ Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats(backups) {
+            const total = backups.length;
+            const totalSize = backups.reduce((sum, b) => sum + (b.size || 0), 0);
+            const lastBackup = backups.length > 0 ? backups[0].created_at : null;
+
+            document.getElementById('totalBackups').textContent = total;
+            document.getElementById('totalSize').textContent = formatBytes(totalSize);
+            document.getElementById('lastBackup').textContent = lastBackup ? formatDate(lastBackup) : 'Chưa có';
+        }
+
+        // ==================== CREATE BACKUP ====================
+        function openCreateBackupModal() {
+            document.getElementById('backupDescription').value = '';
+            document.getElementById('createBackupModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('createBackupModal').classList.remove('active');
+        }
+
+        async function createBackup() {
+            const description = document.getElementById('backupDescription').value.trim();
+            const token = localStorage.getItem('token');
+            showLoading();
+            try {
+                const res = await fetch('/api/admin/backup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ description })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(`✅ Tạo backup thành công! (${data.records} bản ghi)`, 'success');
+                    closeModal();
+                    loadBackups();
+                } else {
+                    showToast('❌ ' + (data.error || 'Lỗi tạo backup'), 'error');
+                }
+            } catch (err) {
+                showToast('❌ Không thể kết nối server', 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // ==================== DOWNLOAD BACKUP ====================
+        async function downloadBackup(backupId) {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`/api/admin/backup/${backupId}/download`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Download failed');
+                }
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = `backup_${backupId}.json`;
+                if (contentDisposition) {
+                    const match = contentDisposition.match(/filename="(.+)"/);
+                    if (match) filename = match[1];
+                }
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+                showToast('✅ Tải file backup thành công', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('❌ Lỗi tải file: ' + err.message, 'error');
+            }
+        }
+
+        // ==================== DELETE BACKUP ====================
+        async function deleteBackup(backupId) {
+            if (!confirm('Bạn có chắc muốn xóa backup này? Hành động không thể hoàn tác.')) return;
+            const token = localStorage.getItem('token');
+            showLoading();
+            try {
+                const res = await fetch(`/api/admin/backup/${backupId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast('🗑️ Đã xóa backup', 'success');
+                    loadBackups();
+                } else {
+                    showToast('❌ ' + (data.error || 'Lỗi xóa backup'), 'error');
+                }
+            } catch (err) {
+                showToast('❌ Không thể kết nối server', 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // ==================== RESTORE BACKUP ====================
+        async function restoreBackup() {
+            const fileInput = document.getElementById('restoreFile');
+            const mode = document.getElementById('restoreMode').value;
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                showToast('Vui lòng chọn file backup', 'warning');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            if (!file.name.endsWith('.json')) {
+                showToast('File phải có định dạng .json', 'error');
+                return;
+            }
+            
+            if (!confirm('⚠️ CẢNH BÁO: Hành động này sẽ xóa tất cả dữ liệu hiện có và thay thế bằng dữ liệu trong file backup. Bạn có chắc chắn muốn tiếp tục?')) {
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('backupFile', file);
+            formData.append('mode', mode);
+            
+            const token = localStorage.getItem('token');
+            showLoading();
+            
+            try {
+                const response = await fetch('/api/admin/restore', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+                
+                const result = await response.json();
+                if (response.ok) {
+                    showToast(`✅ Khôi phục thành công! Đã khôi phục ${result.restored?.orders || 0} đơn hàng, ${result.restored?.products || 0} sản phẩm, ${result.restored?.wax_data || 0} dòng dữ liệu.`, 'success');
+                    setTimeout(() => location.reload(), 2000);
+                } else {
+                    showToast('❌ ' + (result.error || 'Lỗi khôi phục'), 'error');
+                }
+            } catch (err) {
+                console.error('Restore error:', err);
+                showToast('❌ Không thể kết nối server', 'error');
+            } finally {
+                hideLoading();
+                fileInput.value = ''; // reset input
+            }
+        }
+
+        // ==================== INIT ====================
+        window.onload = async () => {
+            const isAuth = await checkAuth();
+            if (isAuth) {
+                loadBackups();
+            }
+        };
+    </script>
+</body>
+</html>

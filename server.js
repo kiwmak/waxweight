@@ -1,11 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const path = require('path');
+const path = require('path'); // THÊM DÒNG NÀY
 const os = require('os');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const fs = require('fs');
+const multer = require('multer');
+
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const supabase = require('./supabase');
@@ -14,9 +17,23 @@ const { requireAuth, requireAdmin, generateToken, JWT_SECRET } = require('./midd
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Log để kiểm tra JWT_SECRET
-console.log('🔑 JWT_SECRET in server.js:', JWT_SECRET ? 'Đã load' : 'CHƯA LOAD');
+// Định nghĩa thư mục tạm cho upload
+const TEMP_DIR = path.join(__dirname, 'temp_uploads');
+if (!fs.existsSync(TEMP_DIR)) {
+    fs.mkdirSync(TEMP_DIR, { recursive: true });
+}
 
+// Cấu hình multer
+const upload = multer({ 
+    dest: TEMP_DIR,
+    limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+});
+
+// Đảm bảo thư mục backups tồn tại
+const BACKUP_DIR = path.join(__dirname, 'backups');
+if (!fs.existsSync(BACKUP_DIR)) {
+    fs.mkdirSync(BACKUP_DIR, { recursive: true });
+}
 // Middleware
 app.use(compression());
 app.use(cors({
@@ -51,6 +68,8 @@ function getLocalIPs() {
 app.get('/api/ips', (req, res) => {
     res.json(getLocalIPs());
 });
+
+
 
 // ==================== AUTHENTICATION API ====================
 
@@ -194,6 +213,9 @@ app.delete('/api/orders/:id', requireAuth, async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+///
+
 
 // ==================== SEARCH API ====================
 
@@ -756,6 +778,177 @@ app.post('/api/admin/users/:id/reset-password', requireAuth, requireAdmin, async
         
     } catch (err) {
         console.error('❌ Reset password error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+///
+// ==================== BACKUP API ====================
+// ==================== BACKUP API ====================
+
+// Lấy danh sách backup
+app.get('/api/admin/backups', requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const { data: backups, error } = await supabase
+            .from('backups')
+            .select('*, created_by_user:created_by(id, username, full_name)')
+            .order('created_at', { ascending: false });
+        if (error) throw error;
+        res.json(backups);
+    } catch (err) {
+        console.error('Get backups error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Tạo backup
+app.post('/api/admin/backup', requireAuth, requireAdmin, async (req, res) => {
+    const { description } = req.body;
+    try {
+        const tables = ['orders', 'products', 'wax_data', 'users'];
+        const backupData = {};
+        for (const table of tables) {
+            const { data, error } = await supabase.from(table).select('*');
+            if (error) backupData[table] = { error: error.message };
+            else backupData[table] = data;
+        }
+        const metadata = {
+            version: '1.0',
+            created_at: new Date().toISOString(),
+            created_by: req.user.id,
+            created_by_username: req.user.username,
+            description: description || ''
+        };
+        const fullBackup = { metadata, data: backupData };
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filename = `backup_${timestamp}.json`;
+        const filePath = path.join(BACKUP_DIR, filename);
+        const jsonContent = JSON.stringify(fullBackup, null, 2);
+        const fileSize = Buffer.byteLength(jsonContent, 'utf8');
+        await fs.promises.writeFile(filePath, jsonContent, 'utf8');
+        const { data: backupRecord, error: dbError } = await supabase
+            .from('backups')
+            .insert([{
+                filename,
+                filepath: filePath,
+                size: fileSize,
+                created_by: req.user.id,
+                description: description || `Backup by ${req.user.username}`
+            }])
+            .select()
+            .single();
+        if (dbError) throw dbError;
+        res.json({ success: true, backup: backupRecord });
+    } catch (err) {
+        console.error('Backup error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Download backup
+app.get('/api/admin/backup/:id/download', requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const { data: backup, error } = await supabase
+            .from('backups')
+            .select('filename')
+            .eq('id', req.params.id)
+            .single();
+        if (error) throw error;
+        const filePath = path.join(BACKUP_DIR, backup.filename);
+        await fs.promises.access(filePath);
+        res.download(filePath, backup.filename);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Xóa backup
+app.delete('/api/admin/backup/:id', requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const { data: backup, error } = await supabase
+            .from('backups')
+            .select('filename')
+            .eq('id', req.params.id)
+            .single();
+        if (error) throw error;
+        const filePath = path.join(BACKUP_DIR, backup.filename);
+        try { await fs.promises.unlink(filePath); } catch(e) {}
+        await supabase.from('backups').delete().eq('id', req.params.id);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Khôi phục từ file backup (upload)
+app.post('/api/admin/restore', requireAuth, requireAdmin, upload.single('backupFile'), async (req, res) => {
+    const file = req.file;
+    const { mode } = req.body; // 'replace' hoặc 'merge'
+    if (!file) {
+        return res.status(400).json({ error: 'Vui lòng chọn file backup' });
+    }
+
+    try {
+        const fileContent = await fs.promises.readFile(file.path, 'utf8');
+        const backupData = JSON.parse(fileContent);
+        if (!backupData.metadata || !backupData.data) {
+            throw new Error('File backup không hợp lệ: thiếu metadata hoặc data');
+        }
+
+        // Nếu chế độ replace, xóa dữ liệu cũ (trừ users để tránh mất tài khoản)
+        if (mode === 'replace') {
+            // Xóa theo thứ tự ngược do ràng buộc khóa ngoại
+            await supabase.from('wax_data').delete().neq('id', 0);
+            await supabase.from('products').delete().neq('id', 0);
+            await supabase.from('orders').delete().neq('id', 0);
+            // Có thể xóa users nếu muốn đồng bộ, nhưng cẩn thận
+            // await supabase.from('users').delete().neq('id', 0);
+        }
+
+        // Khôi phục orders
+        if (backupData.data.orders && Array.isArray(backupData.data.orders)) {
+            for (const order of backupData.data.orders) {
+                const { error } = await supabase.from('orders').upsert(order, { onConflict: 'id' });
+                if (error) throw new Error(`Lỗi khi khôi phục orders: ${error.message}`);
+            }
+        }
+        // Khôi phục products
+        if (backupData.data.products && Array.isArray(backupData.data.products)) {
+            for (const product of backupData.data.products) {
+                const { error } = await supabase.from('products').upsert(product, { onConflict: 'id' });
+                if (error) throw new Error(`Lỗi khi khôi phục products: ${error.message}`);
+            }
+        }
+        // Khôi phục wax_data
+        if (backupData.data.wax_data && Array.isArray(backupData.data.wax_data)) {
+            for (const wax of backupData.data.wax_data) {
+                const { error } = await supabase.from('wax_data').upsert(wax, { onConflict: 'id' });
+                if (error) throw new Error(`Lỗi khi khôi phục wax_data: ${error.message}`);
+            }
+        }
+        // Khôi phục users nếu muốn (tùy chọn)
+        if (mode === 'replace' && backupData.data.users && Array.isArray(backupData.data.users)) {
+            for (const user of backupData.data.users) {
+                const { error } = await supabase.from('users').upsert(user, { onConflict: 'id' });
+                if (error) throw new Error(`Lỗi khi khôi phục users: ${error.message}`);
+            }
+        }
+
+        // Ghi log
+        await supabase.from('user_activities').insert([{
+            user_id: req.user.id,
+            action: 'RESTORE_BACKUP',
+            details: { filename: file.originalname, mode },
+            ip_address: req.ip
+        }]);
+
+        // Xóa file tạm
+        await fs.promises.unlink(file.path);
+        res.json({ success: true, message: 'Khôi phục dữ liệu thành công', mode });
+    } catch (err) {
+        console.error('Restore error:', err);
+        if (file && file.path) {
+            try { await fs.promises.unlink(file.path); } catch(e) {}
+        }
         res.status(500).json({ error: err.message });
     }
 });
