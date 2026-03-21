@@ -1,0 +1,579 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created_at": "2026-03-20T08:41:04.187Z",
+    "created_by": 4,
+    "created_by_username": "admin",
+    "description": "1"
+  },
+  "data": {
+    "orders": [
+      {
+        "id": 4,
+        "order_code": "YN25-0335",
+        "created_at": "2026-03-15T11:13:24.482049"
+      },
+      {
+        "id": 5,
+        "order_code": "YN26-0001",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 6,
+        "order_code": "YN26-0002",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 8,
+        "order_code": "YN26-0004",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 9,
+        "order_code": "YN26-0005",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 10,
+        "order_code": "YN26-0006",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 11,
+        "order_code": "YN26-0007",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 12,
+        "order_code": "YN26-0008",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 13,
+        "order_code": "YN26-0009",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 14,
+        "order_code": "YN26-0010",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 15,
+        "order_code": "YN26-0011",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 16,
+        "order_code": "YN26-0012",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 17,
+        "order_code": "YN26-0013",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 18,
+        "order_code": "YN26-0014",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 19,
+        "order_code": "YN26-0015",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 20,
+        "order_code": "YN26-0017",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 21,
+        "order_code": "YN26-0018",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 22,
+        "order_code": "YN26-0021",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 23,
+        "order_code": "YN26-0022",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 24,
+        "order_code": "YN26-0023",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 25,
+        "order_code": "YN26-0024",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 26,
+        "order_code": "YN26-0025",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 27,
+        "order_code": "YN26-0026",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 28,
+        "order_code": "YN26-0029",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 29,
+        "order_code": "YN26-0032",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 30,
+        "order_code": "YN26-0033",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 31,
+        "order_code": "YN26-0034",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 32,
+        "order_code": "YN26-0035",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 33,
+        "order_code": "YN26-0036",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 34,
+        "order_code": "YN26-0037",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 35,
+        "order_code": "YN26-0038",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 36,
+        "order_code": "YN26-0039",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 37,
+        "order_code": "YN26-0040",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 38,
+        "order_code": "YN26-0041",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 39,
+        "order_code": "YN26-0042",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 40,
+        "order_code": "YN26-0043",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 41,
+        "order_code": "YN26-0044",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 42,
+        "order_code": "YN26-0045",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 43,
+        "order_code": "YN26-0046",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 44,
+        "order_code": "YN26-0047",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 45,
+        "order_code": "YN26-0048",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 46,
+        "order_code": "YN26-0049",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 47,
+        "order_code": "YN26-0050",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 48,
+        "order_code": "YN26-0051",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 49,
+        "order_code": "YN26-0053",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 50,
+        "order_code": "YN26-0054",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 51,
+        "order_code": "YN26-0057",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 52,
+        "order_code": "YN26-0058",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 53,
+        "order_code": "YN26-0061",
+        "created_at": "2026-03-15T10:45:00"
+      },
+      {
+        "id": 56,
+        "order_code": "YN25-0332/0333",
+        "created_at": "2026-03-17T06:55:27.932006"
+      },
+      {
+        "id": 1,
+        "order_code": "YN25-0337/0338",
+        "created_at": "2026-03-15T10:45:02.69926"
+      }
+    ],
+    "products": [
+      {
+        "id": 2,
+        "order_id": 1,
+        "product_code": "22515",
+        "created_at": "2026-03-15T10:46:02.997171"
+      },
+      {
+        "id": 8,
+        "order_id": 56,
+        "product_code": "22509B",
+        "created_at": "2026-03-18T06:33:54.298241"
+      },
+      {
+        "id": 10,
+        "order_id": 21,
+        "product_code": "22025H",
+        "created_at": "2026-03-20T07:39:50.948682"
+      }
+    ],
+    "wax_data": [
+      {
+        "id": 579,
+        "product_id": 8,
+        "stt": 1,
+        "emptyCup": "231",
+        "firstPour": "378",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 580,
+        "product_id": 8,
+        "stt": 2,
+        "emptyCup": "230",
+        "firstPour": "385",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 581,
+        "product_id": 8,
+        "stt": 3,
+        "emptyCup": "225",
+        "firstPour": "329",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 582,
+        "product_id": 8,
+        "stt": 4,
+        "emptyCup": "229",
+        "firstPour": "400",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 583,
+        "product_id": 8,
+        "stt": 5,
+        "emptyCup": "238",
+        "firstPour": "389",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 584,
+        "product_id": 8,
+        "stt": 6,
+        "emptyCup": "236",
+        "firstPour": "404",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 585,
+        "product_id": 8,
+        "stt": 7,
+        "emptyCup": "224",
+        "firstPour": "382",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 586,
+        "product_id": 8,
+        "stt": 8,
+        "emptyCup": "232",
+        "firstPour": "396",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 587,
+        "product_id": 8,
+        "stt": 9,
+        "emptyCup": "231",
+        "firstPour": "413",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 588,
+        "product_id": 8,
+        "stt": 10,
+        "emptyCup": "235",
+        "firstPour": "392",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 589,
+        "product_id": 8,
+        "stt": 11,
+        "emptyCup": "241",
+        "firstPour": "396",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 590,
+        "product_id": 8,
+        "stt": 12,
+        "emptyCup": "224",
+        "firstPour": "375",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 591,
+        "product_id": 8,
+        "stt": 13,
+        "emptyCup": "231",
+        "firstPour": "379",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 592,
+        "product_id": 8,
+        "stt": 14,
+        "emptyCup": "236",
+        "firstPour": "390",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 593,
+        "product_id": 8,
+        "stt": 15,
+        "emptyCup": "234",
+        "firstPour": "389",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 594,
+        "product_id": 8,
+        "stt": 16,
+        "emptyCup": "228",
+        "firstPour": "372",
+        "secondPour": "",
+        "created_at": "2026-03-19T08:04:31.809798"
+      },
+      {
+        "id": 99,
+        "product_id": 2,
+        "stt": 1,
+        "emptyCup": "431",
+        "firstPour": "685",
+        "secondPour": "690",
+        "created_at": "2026-03-17T06:13:15.263124"
+      },
+      {
+        "id": 865,
+        "product_id": 10,
+        "stt": 1,
+        "emptyCup": "405",
+        "firstPour": "712",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 866,
+        "product_id": 10,
+        "stt": 2,
+        "emptyCup": "405",
+        "firstPour": "714",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 867,
+        "product_id": 10,
+        "stt": 3,
+        "emptyCup": "408",
+        "firstPour": "714",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 868,
+        "product_id": 10,
+        "stt": 4,
+        "emptyCup": "409",
+        "firstPour": "717",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 869,
+        "product_id": 10,
+        "stt": 5,
+        "emptyCup": "417",
+        "firstPour": "723",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 870,
+        "product_id": 10,
+        "stt": 6,
+        "emptyCup": "407",
+        "firstPour": "719",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 871,
+        "product_id": 10,
+        "stt": 7,
+        "emptyCup": "411",
+        "firstPour": "721",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 872,
+        "product_id": 10,
+        "stt": 8,
+        "emptyCup": "407",
+        "firstPour": "719",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 873,
+        "product_id": 10,
+        "stt": 9,
+        "emptyCup": "404",
+        "firstPour": "712",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 874,
+        "product_id": 10,
+        "stt": 10,
+        "emptyCup": "409",
+        "firstPour": "719",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 875,
+        "product_id": 10,
+        "stt": 11,
+        "emptyCup": "413",
+        "firstPour": "721",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      },
+      {
+        "id": 876,
+        "product_id": 10,
+        "stt": 12,
+        "emptyCup": "411",
+        "firstPour": "719",
+        "secondPour": "",
+        "created_at": "2026-03-20T07:48:19.967747"
+      }
+    ],
+    "users": [
+      {
+        "id": 5,
+        "username": "hieu",
+        "password": "$2b$10$bsQ6U3dnysR/q/AnzoBn9O6d4d06LZg3QlSFHdx7dSf1wlTd.sqX.",
+        "full_name": "HIEU",
+        "email": "hieuguen@gmail.com",
+        "role": "user",
+        "created_at": "2026-03-19T08:07:55.030417+00:00",
+        "last_login": "2026-03-20T02:22:33.755+00:00",
+        "is_active": true,
+        "created_by": 4,
+        "updated_at": "2026-03-20T02:22:23.706+00:00"
+      },
+      {
+        "id": 4,
+        "username": "admin",
+        "password": "$2b$10$bsQ6U3dnysR/q/AnzoBn9O6d4d06LZg3QlSFHdx7dSf1wlTd.sqX.",
+        "full_name": "Administrator",
+        "email": "kiwmak@gmail.com",
+        "role": "admin",
+        "created_at": "2026-03-19T04:49:30.945773+00:00",
+        "last_login": "2026-03-20T07:08:07.296+00:00",
+        "is_active": true,
+        "created_by": null,
+        "updated_at": "2026-03-20T01:34:21.72+00:00"
+      }
+    ]
+  }
+}
