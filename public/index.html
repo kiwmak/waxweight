@@ -2067,7 +2067,7 @@
             let csv = `Mã đơn hàng,${orderCodeInput.value || ''}\n`;
             csv += `Mã hàng,${productCode}\n`;
             csv += `Ngày xuất,${new Date().toLocaleString('vi-VN')}\n\n`;
-            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Sáp lần2 (g),Chênh lệch (g)\n";
+            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Sáp lần2 (g),Lần 2 rót (g)\n";
 
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
@@ -2095,7 +2095,7 @@
             text += `MÃ HÀNG: ${productCode}\n`;
             text += `THỜI GIAN: ${new Date().toLocaleString('vi-VN')}\n\n`;
             
-            text += "STT\tCốc không\tRót 1\tSáp 1\tRót 2\tSáp 2\tChênh lệch\n";
+            text += "STT\tCốc không\tRót 1\tSáp 1\tRót 2\tSáp 2\tLần 2 rót\n";
             
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
