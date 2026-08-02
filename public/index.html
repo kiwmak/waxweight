@@ -2067,11 +2067,11 @@
             let csv = `Mã đơn hàng,${orderCodeInput.value || ''}\n`;
             csv += `Mã hàng,${productCode}\n`;
             csv += `Ngày xuất,${new Date().toLocaleString('vi-VN')}\n\n`;
-            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Sáp lần2 (g),Lần 2 rót (g)\n";
+            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Lần 2 rót (g),Sáp lần2 (g)\n";
 
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
-                // inputs: [0] emptyCup, [1] firstPour, [2] netWax1, [3] secondPour, [4] netWax2, [5] diff
+                // inputs: [0] emptyCup, [1] firstPour, [2] netWax1, [3] secondPour,[4] diff, [5] netWax2
                 csv += `${idx+1},${inputs[0].value || ''},${inputs[1].value || ''},${inputs[2].value || ''},${inputs[3].value || ''},${inputs[4].value || ''},${inputs[5].value || ''}\n`;
             });
 
