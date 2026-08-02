@@ -966,7 +966,7 @@
                 <div class="stat-value" id="totalWaxWeight">0g</div>
             </div>
             <div class="stat-box" onclick="copyToClipboard(document.getElementById('totalDifference').textContent)">
-                <h3>Tổng chênh (g)</h3>
+                <h3>Tổng rót lần2 (g)</h3>
                 <div class="stat-value" id="totalDifferenceStat">0g</div>
             </div>
         </div>
@@ -2077,7 +2077,7 @@
 
             csv += `\nTổng mẫu,${document.getElementById('totalSamples').textContent}\n`;
             csv += `Tổng sáp,${document.getElementById('totalWaxWeight').textContent}\n`;
-            csv += `Tổng chênh,${document.getElementById('totalDifferenceStat').textContent}\n`;
+            csv += `Tổng sáp lần 2,${document.getElementById('totalDifferenceStat').textContent}\n`;
 
             const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -2105,7 +2105,7 @@
             text += `\nTỔNG KẾT:\n`;
             text += `- Tổng mẫu: ${document.getElementById('totalSamples').textContent}\n`;
             text += `- Tổng sáp: ${document.getElementById('totalWaxWeight').textContent}\n`;
-            text += `- Tổng chênh: ${document.getElementById('totalDifferenceStat').textContent}\n`;
+            text += `- Tổng sáp lần 2: ${document.getElementById('totalDifferenceStat').textContent}\n`;
             
             copyToClipboard(text);
         }
