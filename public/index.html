@@ -989,8 +989,8 @@
                         <th>Tổng rót lần 1 (g)</th>
                         <th>Sáp rót lần 1 (g)</th>
                         <th>Tổng rót lần 2 (g)</th>
-                        <th>Lượt 2 rót (g)</th>
                         <th>Trọng lượng sáp(g)</th>
+                        <th>Lượt 2 rót (g)</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -1001,8 +1001,8 @@
                         <td><input type="text" id="totalFirstPour" readonly></td>
                         <td><input type="text" id="totalNetWax1" readonly></td>
                         <td><input type="text" id="totalSecondPour" readonly></td>
-                        <td><input type="text" id="totalDifference" readonly></td>
                         <td><input type="text" id="totalNetWax2" readonly></td>
+                        <td><input type="text" id="totalDifference" readonly></td>
                         <td></td>
                     </tr>
                     <tr class="total-row">
@@ -1010,8 +1010,8 @@
                         <td><input type="text" id="avgFirstPour" readonly></td>
                         <td><input type="text" id="avgNetWax1" readonly></td>
                         <td><input type="text" id="avgSecondPour" readonly></td>
-                        <td><input type="text" id="avgDifference" readonly></td>
                         <td><input type="text" id="avgNetWax2" readonly></td>
+                        <td><input type="text" id="avgDifference" readonly></td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -2067,11 +2067,11 @@
             let csv = `Mã đơn hàng,${orderCodeInput.value || ''}\n`;
             csv += `Mã hàng,${productCode}\n`;
             csv += `Ngày xuất,${new Date().toLocaleString('vi-VN')}\n\n`;
-            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Lần 2 rót (g),Sáp lần2 (g)\n";
+            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Tổng sáp (g),Lần 2 rót (g) (g)\n";
 
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
-                // inputs: [0] emptyCup, [1] firstPour, [2] netWax1, [3] secondPour,[4] diff, [5] netWax2
+                // inputs: [0] emptyCup, [1] firstPour, [2] netWax1, [3] secondPour,[4]netWax2 , [5] diff
                 csv += `${idx+1},${inputs[0].value || ''},${inputs[1].value || ''},${inputs[2].value || ''},${inputs[3].value || ''},${inputs[4].value || ''},${inputs[5].value || ''}\n`;
             });
 
