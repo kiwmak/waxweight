@@ -832,65 +832,7 @@
             color: #bbb;
         }
 
-        #confirmDataBtn { background: #E91E63; }
-        #confirmDataBtn:disabled {
-            background: #9e9e9e;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        /* Lock Banner */
-        .lock-banner {
-            background: #ffebee;
-            color: #c62828;
-            padding: 14px 20px;
-            border-radius: 14px;
-            margin-bottom: 18px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            animation: slideDown 0.3s ease;
-        }
-
-        .dark-mode .lock-banner {
-            background: #4a1f1f;
-            color: #ff8a80;
-        }
-
-        .lock-banner button {
-            padding: 8px 18px;
-            border: none;
-            border-radius: 20px;
-            background: #9C27B0;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .lock-banner button:hover {
-            background: #7b1fa2;
-        }
-
-        .table-wrapper.locked input {
-            background: #f0f0f0 !important;
-            color: #888 !important;
-            cursor: not-allowed;
-        }
-
-        .dark-mode .table-wrapper.locked input {
-            background: #2a2a2a !important;
-            color: #888 !important;
-        }
-
-        .table-wrapper.locked td button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
+        /* Info message for user */
         .info-message {
             background: #e3f2fd;
             color: #1976d2;
@@ -1005,44 +947,6 @@
             gap: 8px;
             font-size: 14px;
             cursor: pointer;
-        }
-
-        .import-code-fields {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .import-code-fields > div {
-            flex: 1;
-            min-width: 180px;
-        }
-
-        .import-code-fields label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #2e7d32;
-        }
-
-        .dark-mode .import-code-fields label {
-            color: #81c784;
-        }
-
-        .import-code-fields input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 2px solid #c8e6c9;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-
-        .dark-mode .import-code-fields input {
-            background: #3d3d3d;
-            color: white;
-            border-color: #4CAF50;
         }
 
         .modal-actions {
@@ -1168,7 +1072,6 @@
             <button id="addRowBtn">➕ Thêm hàng</button>
             <button id="calcAllBtn">🧮 Tính tất cả</button>
             <button id="saveBtn">💾 Lưu đơn hàng</button>
-            <button id="confirmDataBtn">✅ Xác nhận số liệu</button>
             <button id="importBtn">📥 Nhập CSV/Excel</button>
             <button id="exportBtn">📤 Xuất Excel</button>
             <button id="copyAllBtn">📋 Sao chép</button>
@@ -1199,12 +1102,6 @@
             <p id="progressText"></p>
         </div>
 
-        <!-- LOCK BANNER -->
-        <div class="lock-banner" id="lockBanner">
-            <span>🔒 Số liệu đã được XÁC NHẬN – không thể chỉnh sửa.</span>
-            <button id="unlockDataBtn" style="display:none;">🔓 Mở khóa (Admin)</button>
-        </div>
-
         <!-- DATA TABLE (đã bỏ cột % chênh) -->
         <div class="table-wrapper">
             <table id="dataTable">
@@ -1215,9 +1112,9 @@
                         <th>Tổng rót lần 1 (g)</th>
                         <th>Sáp rót lần 1 (g)</th>
                         <th>Tổng rót lần 2 (g)</th>
-                         <th>Trọng lượng sáp(g)</th>
-			<th>Lượt 2 rót (g)</th>
-                       <th>Thao tác</th>
+                        <th>Lượt 2 rót (g)</th>
+                        <th>Trọng lượng sáp(g)</th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -1227,8 +1124,8 @@
                         <td><input type="text" id="totalFirstPour" readonly></td>
                         <td><input type="text" id="totalNetWax1" readonly></td>
                         <td><input type="text" id="totalSecondPour" readonly></td>
-                       <td><input type="text" id="totalNetWax2" readonly></td>
-			 <td><input type="text" id="totalDifference" readonly></td>
+                        <td><input type="text" id="totalDifference" readonly></td>
+                        <td><input type="text" id="totalNetWax2" readonly></td>
                         <td></td>
                     </tr>
                     <tr class="total-row">
@@ -1236,8 +1133,8 @@
                         <td><input type="text" id="avgFirstPour" readonly></td>
                         <td><input type="text" id="avgNetWax1" readonly></td>
                         <td><input type="text" id="avgSecondPour" readonly></td>
+                        <td><input type="text" id="avgDifference" readonly></td>
                         <td><input type="text" id="avgNetWax2" readonly></td>
-			 <td><input type="text" id="avgDifference" readonly></td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -1267,21 +1164,6 @@
             </div>
             <div style="margin-top: 10px; font-size: 12px; color: #888;">
                 Cột cần có: <strong>Cốc không, Rót lần 1, Rót lần 2</strong> (tên cột không phân biệt hoa/thường, có thể lệch thứ tự). Các cột Sáp lần 1/2, Lần 2 rót sẽ tự tính lại.
-                Nếu file có dòng <strong>"Mã đơn hàng"</strong> và <strong>"Mã hàng"</strong> (như file xuất ra từ hệ thống), hệ thống sẽ tự nhận diện và điền vào 2 ô bên dưới.
-            </div>
-
-            <div class="import-code-fields">
-                <div>
-                    <label>📝 Mã đơn hàng</label>
-                    <input type="text" id="importOrderCode" placeholder="Để trống = dùng đơn hàng đang chọn">
-                </div>
-                <div>
-                    <label>📦 Mã hàng</label>
-                    <input type="text" id="importProductCode" placeholder="Để trống = dùng mã hàng đang chọn">
-                </div>
-            </div>
-            <div style="margin-top: 6px; font-size: 12px; color: #888;">
-                Nếu đơn hàng/mã hàng chưa tồn tại, hệ thống sẽ <strong>tự tạo mới</strong>. Nếu đã tồn tại, dữ liệu sẽ được nhập vào đơn/mã hàng đó.
             </div>
 
             <div class="import-options">
@@ -1328,7 +1210,6 @@
         let lastSaveData = null;
         let chart = null;
         let currentUser = null;
-        let isAdminUser = false;
         const dataCache = new Map();
         let parsedImportRows = []; // { emptyCup, firstPour, secondPour }
 
@@ -1427,7 +1308,6 @@
 
         async function updateUIBasedOnRole() {
             const isAdmin = await checkPermissions();
-            isAdminUser = isAdmin;
             
             const newOrderBtn = document.getElementById('newOrderBtn');
             const deleteOrderBtn = document.getElementById('deleteOrderBtn');
@@ -1487,7 +1367,6 @@
 
                 initializeRows();
                 calculateAll();
-                applyLockStateForCurrentProduct();
                 fetchOrders();
                 displayLANIPs();
                 addQuickFilters();
@@ -1793,7 +1672,6 @@
         // ==================== AUTO SAVE ====================
         function autoSave() {
             if (!currentProductId) return;
-            if (isProductLocked(currentProductId)) return;
             
             const currentData = getCurrentData();
             if (JSON.stringify(currentData) === JSON.stringify(lastSaveData)) {
@@ -2062,13 +1940,11 @@
                 
                 productTabs.innerHTML = '';
                 products.forEach((product, index) => {
-                    setProductLockCache(product.id, product.is_locked);
-
                     const tab = document.createElement('div');
                     tab.className = `product-tab ${index === 0 ? 'active' : ''}`;
                     tab.dataset.productId = product.id;
                     tab.innerHTML = `
-                        ${product.is_locked ? '🔒 ' : ''}${product.product_code}
+                        ${product.product_code}
                         <span class="delete-product" onclick="deleteProduct(${product.id}, event)">✕</span>
                     `;
                     tab.onclick = (e) => {
@@ -2084,7 +1960,6 @@
                 } else {
                     currentProductId = null;
                     initializeRows();
-                    applyLockStateForCurrentProduct();
                 }
             } catch (err) {
                 showToast('Lỗi lấy danh sách mã hàng', 'error');
@@ -2234,7 +2109,6 @@
                 updateRowNumbers();
             }
             calculateAll();
-            applyLockStateForCurrentProduct();
         }
 
         async function loadProductData(productId) {
@@ -2303,11 +2177,6 @@
                     });
                 } else {
                     showToast('❌ Lỗi lưu: ' + result.error, 'error');
-                    if (res.status === 403) {
-                        // Có thể mã hàng vừa bị khóa bởi người khác - đồng bộ lại giao diện
-                        setProductLockCache(currentProductId, true);
-                        applyLockStateForCurrentProduct();
-                    }
                 }
             } catch (err) {
                 showToast('❌ Không thể kết nối server', 'error');
@@ -2424,23 +2293,6 @@
                 .toLowerCase()
                 .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // bỏ dấu tiếng Việt
                 .replace(/[^a-z0-9]/g, '');
-        }
-
-        // Tìm dòng "Mã đơn hàng" / "Mã hàng" trong file (giống định dạng file xuất ra)
-        function detectMetadata(aoa) {
-            let orderCode = '', productCode = '';
-            for (const row of aoa.slice(0, 15)) {
-                if (!row || row.length < 2) continue;
-                const label = normalizeHeader(row[0]);
-                const value = String(row[1] || '').trim();
-                if (!value) continue;
-                if (label.includes('madonhang') || label.includes('ordercode')) {
-                    orderCode = value;
-                } else if (label.includes('mahang') || label.includes('productcode')) {
-                    productCode = value;
-                }
-            }
-            return { orderCode, productCode };
         }
 
         function detectColumnIndexes(headerRow) {
@@ -2564,7 +2416,6 @@
                     try {
                         const aoa = parseCSVText(e.target.result);
                         parsedImportRows = rowsFromAOA(aoa);
-                        applyDetectedMetadata(detectMetadata(aoa));
                         if (parsedImportRows.length === 0) {
                             showToast('⚠️ Không tìm thấy dữ liệu hợp lệ trong file', 'warning');
                         }
@@ -2590,7 +2441,6 @@
                         const sheet = workbook.Sheets[firstSheetName];
                         const aoa = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true, defval: '' });
                         parsedImportRows = rowsFromAOA(aoa);
-                        applyDetectedMetadata(detectMetadata(aoa));
                         if (parsedImportRows.length === 0) {
                             showToast('⚠️ Không tìm thấy dữ liệu hợp lệ trong file', 'warning');
                         }
@@ -2607,155 +2457,18 @@
             }
         }
 
-        function applyDetectedMetadata(meta) {
-            const orderCodeField = document.getElementById('importOrderCode');
-            const productCodeField = document.getElementById('importProductCode');
-            if (meta.orderCode) orderCodeField.value = meta.orderCode;
-            if (meta.productCode) productCodeField.value = meta.productCode;
-        }
-
         function openImportModal() {
             parsedImportRows = [];
             importPreviewWrapper.style.display = 'none';
             importPreviewBody.innerHTML = '';
             confirmImportBtn.disabled = true;
             importFileInput.value = '';
-            document.getElementById('importOrderCode').value = '';
-            document.getElementById('importProductCode').value = '';
             document.querySelector('input[name="importMode"][value="replace"]').checked = true;
             importModalOverlay.style.display = 'flex';
         }
 
         function closeImportModal() {
             importModalOverlay.style.display = 'none';
-        }
-
-        // Cập nhật tab mã hàng mà KHÔNG tự động load/ghi đè dữ liệu bảng (khác với fetchProducts)
-        async function refreshProductTabs(orderId, activeProductId) {
-            const token = localStorage.getItem('token');
-            const res = await fetch(`${API_BASE}/api/orders/${orderId}/products`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const products = await res.json();
-
-            productTabs.innerHTML = '';
-            products.forEach(product => {
-                setProductLockCache(product.id, product.is_locked);
-
-                const tab = document.createElement('div');
-                tab.className = `product-tab ${product.id == activeProductId ? 'active' : ''}`;
-                tab.dataset.productId = product.id;
-                tab.innerHTML = `
-                    ${product.is_locked ? '🔒 ' : ''}${product.product_code}
-                    <span class="delete-product" onclick="deleteProduct(${product.id}, event)">✕</span>
-                `;
-                tab.onclick = (e) => {
-                    if (!e.target.classList.contains('delete-product')) {
-                        selectProduct(product.id);
-                    }
-                };
-                productTabs.appendChild(tab);
-            });
-
-            return products;
-        }
-
-        // Tìm hoặc tạo đơn hàng + mã hàng dựa trên mã nhập từ file, rồi chuyển bảng sang đúng ngữ cảnh đó.
-        // Trả về true nếu thành công, false nếu có lỗi (đã hiển thị toast).
-        async function resolveOrderAndProduct(orderCode, productCode) {
-            const token = localStorage.getItem('token');
-            let orderId = currentOrderId;
-
-            if (orderCode) {
-                const foundOption = Array.from(orderSelect.options)
-                    .find(o => o.value && o.textContent.trim().toLowerCase() === orderCode.toLowerCase());
-
-                if (foundOption) {
-                    orderId = foundOption.value;
-                } else {
-                    const isAdmin = await checkPermissions();
-                    if (!isAdmin) {
-                        showToast(`⚠️ Không tìm thấy đơn hàng "${orderCode}" và bạn không có quyền tạo mới`, 'error');
-                        return false;
-                    }
-                    const res = await fetch(`${API_BASE}/api/orders`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                        body: JSON.stringify({ order_code: orderCode })
-                    });
-                    const data = await res.json();
-                    if (data.error) {
-                        showToast('❌ Lỗi tạo đơn hàng: ' + data.error, 'error');
-                        return false;
-                    }
-                    orderId = data.id;
-                    await fetchOrders();
-                    showToast(`✅ Đã tạo đơn hàng mới "${orderCode}"`, 'success');
-                }
-
-                currentOrderId = orderId;
-                orderSelect.value = orderId;
-                orderCodeInput.value = orderCode;
-                productsPanel.style.display = 'block';
-            }
-
-            if (!orderId) {
-                showToast('⚠️ Vui lòng chọn đơn hàng, hoặc nhập Mã đơn hàng trong ô nhập', 'warning');
-                return false;
-            }
-
-            const productsRes = await fetch(`${API_BASE}/api/orders/${orderId}/products`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const products = await productsRes.json();
-            products.forEach(p => setProductLockCache(p.id, p.is_locked));
-
-            let productId = currentProductId;
-
-            if (productCode) {
-                const existing = products.find(p => p.product_code.trim().toLowerCase() === productCode.toLowerCase());
-                if (existing) {
-                    productId = existing.id;
-                } else {
-                    const res = await fetch(`${API_BASE}/api/products`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                        body: JSON.stringify({ order_id: orderId, product_code: productCode })
-                    });
-                    const data = await res.json();
-                    if (data.error) {
-                        showToast('❌ Lỗi tạo mã hàng: ' + data.error, 'error');
-                        return false;
-                    }
-                    productId = data.id;
-                    showToast(`✅ Đã tạo mã hàng mới "${productCode}"`, 'success');
-                }
-            } else if (!productId && products.length > 0) {
-                productId = products[0].id;
-            }
-
-            if (!productId) {
-                showToast('⚠️ Đơn hàng chưa có mã hàng nào, vui lòng nhập Mã hàng để tạo mới', 'warning');
-                return false;
-            }
-
-            if (isProductLocked(productId)) {
-                showToast('🔒 Mã hàng này đã được xác nhận và khóa, không thể nhập thêm dữ liệu. Vui lòng nhờ admin mở khóa trước.', 'error');
-                return false;
-            }
-
-            currentProductId = productId;
-            await refreshProductTabs(orderId, productId);
-
-            const importMode = document.querySelector('input[name="importMode"]:checked').value;
-            if (importMode === 'append') {
-                // Tải dữ liệu đã lưu của mã hàng này trước, rồi mới nối thêm dòng import vào cuối
-                await loadProductData(productId);
-            } else {
-                tableBody.innerHTML = '';
-            }
-
-            return true;
         }
 
         function applyImportedRows(rows) {
@@ -2814,33 +2527,13 @@
             if (file) handleImportFile(file);
         });
 
-        confirmImportBtn.addEventListener('click', async () => {
+        confirmImportBtn.addEventListener('click', () => {
             if (parsedImportRows.length === 0) return;
-
-            const orderCode = document.getElementById('importOrderCode').value.trim();
-            const productCode = document.getElementById('importProductCode').value.trim();
-
-            const originalLabel = confirmImportBtn.innerHTML;
-            confirmImportBtn.disabled = true;
-            confirmImportBtn.innerHTML = '⏳ Đang xử lý...';
-            showLoading();
-
-            try {
-                const ok = await resolveOrderAndProduct(orderCode, productCode);
-                if (!ok) return;
-
-                applyImportedRows(parsedImportRows);
-                await saveOrder(true);
-                showToast('💾 Đã nhập và lưu dữ liệu vào đơn hàng/mã hàng', 'success');
-                closeImportModal();
-            } catch (err) {
-                console.error(err);
-                showToast('❌ Lỗi khi nhập đơn hàng/mã hàng', 'error');
-            } finally {
-                hideLoading();
-                confirmImportBtn.disabled = false;
-                confirmImportBtn.innerHTML = originalLabel;
+            if (!currentProductId) {
+                showToast('⚠️ Vui lòng chọn mã hàng trước khi nhập dữ liệu', 'warning');
             }
+            applyImportedRows(parsedImportRows);
+            closeImportModal();
         });
 
         cancelImportBtn.addEventListener('click', closeImportModal);
@@ -2849,138 +2542,6 @@
         });
 
         document.getElementById('importBtn').addEventListener('click', openImportModal);
-
-        // ==================== CONFIRM / LOCK DATA FUNCTIONS ====================
-        const tableWrapperEl = document.querySelector('.table-wrapper');
-        const lockBanner = document.getElementById('lockBanner');
-        const confirmDataBtn = document.getElementById('confirmDataBtn');
-        const unlockDataBtn = document.getElementById('unlockDataBtn');
-
-        // Trạng thái khóa lấy từ server (cột is_locked trong bảng products), cache theo productId
-        const productLockMap = new Map();
-
-        function setProductLockCache(productId, locked) {
-            productLockMap.set(String(productId), !!locked);
-        }
-
-        function isProductLocked(productId) {
-            if (!productId) return false;
-            return productLockMap.get(String(productId)) === true;
-        }
-
-        function lockTableUI() {
-            document.querySelectorAll('#tableBody input.data-input').forEach(inp => inp.readOnly = true);
-            document.querySelectorAll('#tableBody td button').forEach(btn => btn.disabled = true);
-            document.getElementById('addRowBtn').disabled = true;
-            document.getElementById('importBtn').disabled = true;
-            document.getElementById('saveBtn').disabled = true;
-            document.getElementById('calcAllBtn').disabled = true;
-            tableWrapperEl.classList.add('locked');
-        }
-
-        function unlockTableUI() {
-            document.querySelectorAll('#tableBody input.data-input').forEach(inp => inp.readOnly = false);
-            document.querySelectorAll('#tableBody td button').forEach(btn => btn.disabled = false);
-            document.getElementById('addRowBtn').disabled = false;
-            document.getElementById('importBtn').disabled = false;
-            document.getElementById('saveBtn').disabled = false;
-            document.getElementById('calcAllBtn').disabled = false;
-            tableWrapperEl.classList.remove('locked');
-        }
-
-        // Đồng bộ giao diện (banner, nút, khóa input) theo trạng thái khóa của mã hàng đang xem
-        function applyLockStateForCurrentProduct() {
-            const locked = isProductLocked(currentProductId);
-
-            if (locked) {
-                lockTableUI();
-                lockBanner.style.display = 'flex';
-                confirmDataBtn.disabled = true;
-                confirmDataBtn.innerHTML = '🔒 Đã xác nhận';
-                unlockDataBtn.style.display = isAdminUser ? 'inline-block' : 'none';
-            } else {
-                unlockTableUI();
-                lockBanner.style.display = 'none';
-                confirmDataBtn.disabled = !currentProductId;
-                confirmDataBtn.innerHTML = '✅ Xác nhận số liệu';
-            }
-        }
-
-        async function confirmDataHandler() {
-            if (!currentProductId) {
-                showToast('⚠️ Vui lòng chọn mã hàng trước khi xác nhận', 'warning');
-                return;
-            }
-            if (isProductLocked(currentProductId)) return;
-
-            if (!confirm('Xác nhận số liệu?\n\nSau khi xác nhận, bạn sẽ KHÔNG thể chỉnh sửa dữ liệu này nữa (trừ khi admin mở khóa).')) {
-                return;
-            }
-
-            showLoading();
-            try {
-                // Lưu lại dữ liệu mới nhất trước khi khóa
-                await saveOrder(true);
-
-                const token = localStorage.getItem('token');
-                const res = await fetch(`${API_BASE}/api/products/${currentProductId}/lock`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const result = await res.json();
-
-                if (!res.ok || result.error) {
-                    showToast('❌ Lỗi khi khóa: ' + (result.error || 'Không rõ nguyên nhân'), 'error');
-                    return;
-                }
-
-                setProductLockCache(currentProductId, true);
-                applyLockStateForCurrentProduct();
-                showToast('🔒 Đã xác nhận, số liệu hiện đã được khóa', 'success');
-            } catch (err) {
-                console.error(err);
-                showToast('❌ Không thể kết nối server', 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        async function unlockDataHandler() {
-            const isAdmin = await checkPermissions();
-            if (!isAdmin) {
-                showToast('⚠️ Chỉ admin mới có quyền mở khóa', 'error');
-                return;
-            }
-            if (!currentProductId) return;
-            if (!confirm('Mở khóa để chỉnh sửa lại số liệu này?')) return;
-
-            showLoading();
-            try {
-                const token = localStorage.getItem('token');
-                const res = await fetch(`${API_BASE}/api/products/${currentProductId}/unlock`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const result = await res.json();
-
-                if (!res.ok || result.error) {
-                    showToast('❌ Lỗi khi mở khóa: ' + (result.error || 'Không rõ nguyên nhân'), 'error');
-                    return;
-                }
-
-                setProductLockCache(currentProductId, false);
-                applyLockStateForCurrentProduct();
-                showToast('🔓 Đã mở khóa, có thể chỉnh sửa lại', 'info');
-            } catch (err) {
-                console.error(err);
-                showToast('❌ Không thể kết nối server', 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        confirmDataBtn.addEventListener('click', confirmDataHandler);
-        unlockDataBtn.addEventListener('click', unlockDataHandler);
 
         // ==================== LAN IPs ====================
         async function displayLANIPs() {

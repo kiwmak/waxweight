@@ -462,7 +462,6 @@
         #saveBtn { background: #2196F3; }
         #exportBtn { background: #9C27B0; }
         #copyAllBtn { background: #607D8B; }
-        #importBtn { background: #009688; }
 
         /* Stats */
         .stats {
@@ -832,65 +831,7 @@
             color: #bbb;
         }
 
-        #confirmDataBtn { background: #E91E63; }
-        #confirmDataBtn:disabled {
-            background: #9e9e9e;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        /* Lock Banner */
-        .lock-banner {
-            background: #ffebee;
-            color: #c62828;
-            padding: 14px 20px;
-            border-radius: 14px;
-            margin-bottom: 18px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            animation: slideDown 0.3s ease;
-        }
-
-        .dark-mode .lock-banner {
-            background: #4a1f1f;
-            color: #ff8a80;
-        }
-
-        .lock-banner button {
-            padding: 8px 18px;
-            border: none;
-            border-radius: 20px;
-            background: #9C27B0;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .lock-banner button:hover {
-            background: #7b1fa2;
-        }
-
-        .table-wrapper.locked input {
-            background: #f0f0f0 !important;
-            color: #888 !important;
-            cursor: not-allowed;
-        }
-
-        .dark-mode .table-wrapper.locked input {
-            background: #2a2a2a !important;
-            color: #888 !important;
-        }
-
-        .table-wrapper.locked td button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
+        /* Info message for user */
         .info-message {
             background: #e3f2fd;
             color: #1976d2;
@@ -905,164 +846,6 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        /* Import Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9998;
-            padding: 15px;
-        }
-
-        .modal-box {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            max-width: 550px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-
-        .dark-mode .modal-box {
-            background: #2d2d2d;
-            color: #fff;
-        }
-
-        .modal-box h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-
-        .dark-mode .modal-box h3 {
-            color: #fff;
-        }
-
-        .import-dropzone {
-            border: 3px dashed #4CAF50;
-            border-radius: 16px;
-            padding: 30px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-            background: #f1f8f1;
-        }
-
-        .dark-mode .import-dropzone {
-            background: #1e3a2e;
-        }
-
-        .import-dropzone.dragover {
-            background: #c8e6c9;
-            border-color: #2e7d32;
-        }
-
-        .import-dropzone p {
-            margin-top: 10px;
-            color: #555;
-        }
-
-        .dark-mode .import-dropzone p {
-            color: #ccc;
-        }
-
-        .import-preview {
-            margin-top: 15px;
-            max-height: 250px;
-            overflow-y: auto;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-        }
-
-        .import-preview table {
-            min-width: unset;
-            width: 100%;
-        }
-
-        .import-preview th, .import-preview td {
-            padding: 6px 4px;
-            font-size: 12px;
-        }
-
-        .import-options {
-            margin: 15px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .import-options label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .import-code-fields {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .import-code-fields > div {
-            flex: 1;
-            min-width: 180px;
-        }
-
-        .import-code-fields label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #2e7d32;
-        }
-
-        .dark-mode .import-code-fields label {
-            color: #81c784;
-        }
-
-        .import-code-fields input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 2px solid #c8e6c9;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-
-        .dark-mode .import-code-fields input {
-            background: #3d3d3d;
-            color: white;
-            border-color: #4CAF50;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .modal-actions button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            color: white;
-        }
-
-        #confirmImportBtn { background: #4CAF50; }
-        #cancelImportBtn { background: #9e9e9e; }
     </style>
 </head>
 <body>
@@ -1168,12 +951,9 @@
             <button id="addRowBtn">➕ Thêm hàng</button>
             <button id="calcAllBtn">🧮 Tính tất cả</button>
             <button id="saveBtn">💾 Lưu đơn hàng</button>
-            <button id="confirmDataBtn">✅ Xác nhận số liệu</button>
-            <button id="importBtn">📥 Nhập CSV/Excel</button>
             <button id="exportBtn">📤 Xuất Excel</button>
             <button id="copyAllBtn">📋 Sao chép</button>
         </div>
-        <input type="file" id="importFileInput" accept=".csv,.xlsx,.xls" style="display:none;">
 
         <!-- STATS (đã bỏ % chênh) -->
         <div class="stats">
@@ -1199,12 +979,6 @@
             <p id="progressText"></p>
         </div>
 
-        <!-- LOCK BANNER -->
-        <div class="lock-banner" id="lockBanner">
-            <span>🔒 Số liệu đã được XÁC NHẬN – không thể chỉnh sửa.</span>
-            <button id="unlockDataBtn" style="display:none;">🔓 Mở khóa (Admin)</button>
-        </div>
-
         <!-- DATA TABLE (đã bỏ cột % chênh) -->
         <div class="table-wrapper">
             <table id="dataTable">
@@ -1212,12 +986,12 @@
                     <tr>
                         <th>STT</th>
                         <th>Cốc không (g)</th>
-                        <th>Tổng rót lần 1 (g)</th>
-                        <th>Sáp rót lần 1 (g)</th>
-                        <th>Tổng rót lần 2 (g)</th>
-                         <th>Trọng lượng sáp(g)</th>
-			<th>Lượt 2 rót (g)</th>
-                       <th>Thao tác</th>
+                        <th>Rót lần 1 (g)</th>
+                        <th>Sáp lần 1 (g)</th>
+                        <th>Rót lần 2 (g)</th>
+                        <th>Sáp lần 2 (g)</th>
+                        <th>Lượt 2 rót (g)</th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -1227,8 +1001,8 @@
                         <td><input type="text" id="totalFirstPour" readonly></td>
                         <td><input type="text" id="totalNetWax1" readonly></td>
                         <td><input type="text" id="totalSecondPour" readonly></td>
-                       <td><input type="text" id="totalNetWax2" readonly></td>
-			 <td><input type="text" id="totalDifference" readonly></td>
+                        <td><input type="text" id="totalNetWax2" readonly></td>
+                        <td><input type="text" id="totalDifference" readonly></td>
                         <td></td>
                     </tr>
                     <tr class="total-row">
@@ -1237,7 +1011,7 @@
                         <td><input type="text" id="avgNetWax1" readonly></td>
                         <td><input type="text" id="avgSecondPour" readonly></td>
                         <td><input type="text" id="avgNetWax2" readonly></td>
-			 <td><input type="text" id="avgDifference" readonly></td>
+                        <td><input type="text" id="avgDifference" readonly></td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -1256,67 +1030,9 @@
         </div>
     </div>
 
-    <!-- IMPORT MODAL -->
-    <div class="modal-overlay" id="importModalOverlay">
-        <div class="modal-box">
-            <h3>📥 Nhập dữ liệu từ CSV/Excel</h3>
-            <div class="import-dropzone" id="importDropzone">
-                <div style="font-size: 36px;">📄</div>
-                <p><strong>Kéo thả file vào đây</strong> hoặc bấm để chọn file</p>
-                <p style="font-size: 12px; margin-top: 8px;">Hỗ trợ .csv, .xlsx, .xls</p>
-            </div>
-            <div style="margin-top: 10px; font-size: 12px; color: #888;">
-                Cột cần có: <strong>Cốc không, Rót lần 1, Rót lần 2</strong> (tên cột không phân biệt hoa/thường, có thể lệch thứ tự). Các cột Sáp lần 1/2, Lần 2 rót sẽ tự tính lại.
-                Nếu file có dòng <strong>"Mã đơn hàng"</strong> và <strong>"Mã hàng"</strong> (như file xuất ra từ hệ thống), hệ thống sẽ tự nhận diện và điền vào 2 ô bên dưới.
-            </div>
-
-            <div class="import-code-fields">
-                <div>
-                    <label>📝 Mã đơn hàng</label>
-                    <input type="text" id="importOrderCode" placeholder="Để trống = dùng đơn hàng đang chọn">
-                </div>
-                <div>
-                    <label>📦 Mã hàng</label>
-                    <input type="text" id="importProductCode" placeholder="Để trống = dùng mã hàng đang chọn">
-                </div>
-            </div>
-            <div style="margin-top: 6px; font-size: 12px; color: #888;">
-                Nếu đơn hàng/mã hàng chưa tồn tại, hệ thống sẽ <strong>tự tạo mới</strong>. Nếu đã tồn tại, dữ liệu sẽ được nhập vào đơn/mã hàng đó.
-            </div>
-
-            <div class="import-options">
-                <label><input type="radio" name="importMode" value="replace" checked> Thay thế toàn bộ bảng hiện tại</label>
-                <label><input type="radio" name="importMode" value="append"> Thêm vào cuối bảng hiện tại</label>
-            </div>
-
-            <div id="importPreviewWrapper" style="display:none;">
-                <p style="margin-bottom: 8px; font-weight: 600;">Xem trước (<span id="importRowCount">0</span> dòng):</p>
-                <div class="import-preview">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Cốc không</th>
-                                <th>Rót 1</th>
-                                <th>Rót 2</th>
-                            </tr>
-                        </thead>
-                        <tbody id="importPreviewBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="modal-actions">
-                <button id="cancelImportBtn">Hủy</button>
-                <button id="confirmImportBtn" disabled>✅ Nhập dữ liệu</button>
-            </div>
-        </div>
-    </div>
-
     <button id="themeToggle">🌙</button>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>
         const API_BASE = window.location.origin;
         
@@ -1328,9 +1044,7 @@
         let lastSaveData = null;
         let chart = null;
         let currentUser = null;
-        let isAdminUser = false;
         const dataCache = new Map();
-        let parsedImportRows = []; // { emptyCup, firstPour, secondPour }
 
         // DOM Elements
         const tableBody = document.getElementById('tableBody');
@@ -1427,7 +1141,6 @@
 
         async function updateUIBasedOnRole() {
             const isAdmin = await checkPermissions();
-            isAdminUser = isAdmin;
             
             const newOrderBtn = document.getElementById('newOrderBtn');
             const deleteOrderBtn = document.getElementById('deleteOrderBtn');
@@ -1487,7 +1200,6 @@
 
                 initializeRows();
                 calculateAll();
-                applyLockStateForCurrentProduct();
                 fetchOrders();
                 displayLANIPs();
                 addQuickFilters();
@@ -1793,7 +1505,6 @@
         // ==================== AUTO SAVE ====================
         function autoSave() {
             if (!currentProductId) return;
-            if (isProductLocked(currentProductId)) return;
             
             const currentData = getCurrentData();
             if (JSON.stringify(currentData) === JSON.stringify(lastSaveData)) {
@@ -2062,13 +1773,11 @@
                 
                 productTabs.innerHTML = '';
                 products.forEach((product, index) => {
-                    setProductLockCache(product.id, product.is_locked);
-
                     const tab = document.createElement('div');
                     tab.className = `product-tab ${index === 0 ? 'active' : ''}`;
                     tab.dataset.productId = product.id;
                     tab.innerHTML = `
-                        ${product.is_locked ? '🔒 ' : ''}${product.product_code}
+                        ${product.product_code}
                         <span class="delete-product" onclick="deleteProduct(${product.id}, event)">✕</span>
                     `;
                     tab.onclick = (e) => {
@@ -2084,7 +1793,6 @@
                 } else {
                     currentProductId = null;
                     initializeRows();
-                    applyLockStateForCurrentProduct();
                 }
             } catch (err) {
                 showToast('Lỗi lấy danh sách mã hàng', 'error');
@@ -2234,7 +1942,6 @@
                 updateRowNumbers();
             }
             calculateAll();
-            applyLockStateForCurrentProduct();
         }
 
         async function loadProductData(productId) {
@@ -2303,11 +2010,6 @@
                     });
                 } else {
                     showToast('❌ Lỗi lưu: ' + result.error, 'error');
-                    if (res.status === 403) {
-                        // Có thể mã hàng vừa bị khóa bởi người khác - đồng bộ lại giao diện
-                        setProductLockCache(currentProductId, true);
-                        applyLockStateForCurrentProduct();
-                    }
                 }
             } catch (err) {
                 showToast('❌ Không thể kết nối server', 'error');
@@ -2365,7 +2067,7 @@
             let csv = `Mã đơn hàng,${orderCodeInput.value || ''}\n`;
             csv += `Mã hàng,${productCode}\n`;
             csv += `Ngày xuất,${new Date().toLocaleString('vi-VN')}\n\n`;
-            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Sáp lần2 (g),Lần 2 rót (g)\n";
+            csv += "STT,Cốc không (g),Rót lần1 (g),Sáp lần1 (g),Rót lần2 (g),Sáp lần2 (g),Chênh lệch (g)\n";
 
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
@@ -2393,7 +2095,7 @@
             text += `MÃ HÀNG: ${productCode}\n`;
             text += `THỜI GIAN: ${new Date().toLocaleString('vi-VN')}\n\n`;
             
-            text += "STT\tCốc không\tRót 1\tSáp 1\tRót 2\tSáp 2\tLần 2 rót\n";
+            text += "STT\tCốc không\tRót 1\tSáp 1\tRót 2\tSáp 2\tChênh lệch\n";
             
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
@@ -2407,580 +2109,6 @@
             
             copyToClipboard(text);
         }
-
-        // ==================== IMPORT FUNCTIONS ====================
-        const importModalOverlay = document.getElementById('importModalOverlay');
-        const importDropzone = document.getElementById('importDropzone');
-        const importFileInput = document.getElementById('importFileInput');
-        const importPreviewWrapper = document.getElementById('importPreviewWrapper');
-        const importPreviewBody = document.getElementById('importPreviewBody');
-        const importRowCountEl = document.getElementById('importRowCount');
-        const confirmImportBtn = document.getElementById('confirmImportBtn');
-        const cancelImportBtn = document.getElementById('cancelImportBtn');
-
-        // Chuẩn hóa tên cột để nhận diện linh hoạt
-        function normalizeHeader(h) {
-            return String(h || '')
-                .toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // bỏ dấu tiếng Việt
-                .replace(/[^a-z0-9]/g, '');
-        }
-
-        // Tìm dòng "Mã đơn hàng" / "Mã hàng" trong file (giống định dạng file xuất ra)
-        function detectMetadata(aoa) {
-            let orderCode = '', productCode = '';
-            for (const row of aoa.slice(0, 15)) {
-                if (!row || row.length < 2) continue;
-                const label = normalizeHeader(row[0]);
-                const value = String(row[1] || '').trim();
-                if (!value) continue;
-                if (label.includes('madonhang') || label.includes('ordercode')) {
-                    orderCode = value;
-                } else if (label.includes('mahang') || label.includes('productcode')) {
-                    productCode = value;
-                }
-            }
-            return { orderCode, productCode };
-        }
-
-        function detectColumnIndexes(headerRow) {
-            const normalized = headerRow.map(normalizeHeader);
-            const findCol = (keywords) => {
-                for (let i = 0; i < normalized.length; i++) {
-                    if (keywords.some(k => normalized[i].includes(k))) return i;
-                }
-                return -1;
-            };
-
-            return {
-                emptyCup: findCol(['cockhong', 'coc', 'tare', 'emptycup', 'empty']),
-                firstPour: findCol(['rotlan1', 'lan1', 'rot1', 'firstpour', 'pour1']),
-                secondPour: findCol(['rotlan2', 'lan2rot', 'rot2', 'secondpour', 'pour2', 'tongrotlan2'])
-            };
-        }
-
-        function parseNumber(val) {
-            if (val === null || val === undefined) return '';
-            const s = String(val).trim().replace(',', '.');
-            const n = parseFloat(s);
-            return isNaN(n) ? '' : n;
-        }
-
-        // Chuyển mảng "array of arrays" (từ CSV hoặc Excel sheet) thành các dòng đã chuẩn hóa
-        function rowsFromAOA(aoa) {
-            if (!aoa || aoa.length === 0) return [];
-
-            // Tìm dòng tiêu đề: dòng đầu tiên có chứa ít nhất 1 trong các từ khóa cột
-            let headerRowIndex = -1;
-            let cols = null;
-            for (let i = 0; i < Math.min(aoa.length, 15); i++) {
-                const detected = detectColumnIndexes(aoa[i]);
-                if (detected.emptyCup !== -1 || detected.firstPour !== -1 || detected.secondPour !== -1) {
-                    headerRowIndex = i;
-                    cols = detected;
-                    break;
-                }
-            }
-
-            if (headerRowIndex === -1) {
-                // Không tìm thấy header rõ ràng -> giả định 3 cột đầu tiên là empty, first, second
-                cols = { emptyCup: 0, firstPour: 1, secondPour: 2 };
-                headerRowIndex = -1; // không có dòng header để bỏ qua
-            }
-
-            const dataRows = aoa.slice(headerRowIndex + 1);
-            const result = [];
-
-            dataRows.forEach(r => {
-                if (!r || r.every(c => c === '' || c === null || c === undefined)) return;
-
-                const emptyCupVal = cols.emptyCup !== -1 ? parseNumber(r[cols.emptyCup]) : '';
-                const firstPourVal = cols.firstPour !== -1 ? parseNumber(r[cols.firstPour]) : '';
-                const secondPourVal = cols.secondPour !== -1 ? parseNumber(r[cols.secondPour]) : '';
-
-                // Bỏ qua dòng hoàn toàn trống hoặc dòng tổng/trung bình
-                const rowText = r.join(' ').toLowerCase();
-                if (rowText.includes('tổng') || rowText.includes('trung bình') || rowText.includes('total') || rowText.includes('average')) {
-                    return;
-                }
-
-                if (emptyCupVal === '' && firstPourVal === '' && secondPourVal === '') return;
-
-                result.push({
-                    emptyCup: emptyCupVal === '' ? '' : emptyCupVal.toFixed(2),
-                    firstPour: firstPourVal === '' ? '' : firstPourVal.toFixed(2),
-                    secondPour: secondPourVal === '' ? '' : secondPourVal.toFixed(2)
-                });
-            });
-
-            return result;
-        }
-
-        function parseCSVText(text) {
-            // Parser CSV đơn giản, hỗ trợ dấu phẩy phân tách và dấu ngoặc kép
-            const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
-            const aoa = [];
-            lines.forEach(line => {
-                if (line.trim() === '') return;
-                const cells = [];
-                let cur = '';
-                let inQuotes = false;
-                for (let i = 0; i < line.length; i++) {
-                    const ch = line[i];
-                    if (ch === '"') {
-                        inQuotes = !inQuotes;
-                    } else if (ch === ',' && !inQuotes) {
-                        cells.push(cur);
-                        cur = '';
-                    } else {
-                        cur += ch;
-                    }
-                }
-                cells.push(cur);
-                aoa.push(cells);
-            });
-            return aoa;
-        }
-
-        function renderImportPreview(rows) {
-            importPreviewBody.innerHTML = '';
-            rows.slice(0, 100).forEach((row, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${idx + 1}</td><td>${row.emptyCup}</td><td>${row.firstPour}</td><td>${row.secondPour}</td>`;
-                importPreviewBody.appendChild(tr);
-            });
-            importRowCountEl.textContent = rows.length;
-            importPreviewWrapper.style.display = rows.length > 0 ? 'block' : 'none';
-            confirmImportBtn.disabled = rows.length === 0;
-        }
-
-        function handleImportFile(file) {
-            if (!file) return;
-            const ext = file.name.split('.').pop().toLowerCase();
-
-            if (ext === 'csv') {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const aoa = parseCSVText(e.target.result);
-                        parsedImportRows = rowsFromAOA(aoa);
-                        applyDetectedMetadata(detectMetadata(aoa));
-                        if (parsedImportRows.length === 0) {
-                            showToast('⚠️ Không tìm thấy dữ liệu hợp lệ trong file', 'warning');
-                        }
-                        renderImportPreview(parsedImportRows);
-                    } catch (err) {
-                        console.error(err);
-                        showToast('❌ Lỗi đọc file CSV', 'error');
-                    }
-                };
-                reader.onerror = () => showToast('❌ Không thể đọc file', 'error');
-                reader.readAsText(file, 'UTF-8');
-            } else if (ext === 'xlsx' || ext === 'xls') {
-                if (typeof XLSX === 'undefined') {
-                    showToast('❌ Thư viện đọc Excel chưa sẵn sàng, thử lại sau', 'error');
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, { type: 'array' });
-                        const firstSheetName = workbook.SheetNames[0];
-                        const sheet = workbook.Sheets[firstSheetName];
-                        const aoa = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true, defval: '' });
-                        parsedImportRows = rowsFromAOA(aoa);
-                        applyDetectedMetadata(detectMetadata(aoa));
-                        if (parsedImportRows.length === 0) {
-                            showToast('⚠️ Không tìm thấy dữ liệu hợp lệ trong file', 'warning');
-                        }
-                        renderImportPreview(parsedImportRows);
-                    } catch (err) {
-                        console.error(err);
-                        showToast('❌ Lỗi đọc file Excel', 'error');
-                    }
-                };
-                reader.onerror = () => showToast('❌ Không thể đọc file', 'error');
-                reader.readAsArrayBuffer(file);
-            } else {
-                showToast('❌ Định dạng file không được hỗ trợ (chỉ .csv, .xlsx, .xls)', 'error');
-            }
-        }
-
-        function applyDetectedMetadata(meta) {
-            const orderCodeField = document.getElementById('importOrderCode');
-            const productCodeField = document.getElementById('importProductCode');
-            if (meta.orderCode) orderCodeField.value = meta.orderCode;
-            if (meta.productCode) productCodeField.value = meta.productCode;
-        }
-
-        function openImportModal() {
-            parsedImportRows = [];
-            importPreviewWrapper.style.display = 'none';
-            importPreviewBody.innerHTML = '';
-            confirmImportBtn.disabled = true;
-            importFileInput.value = '';
-            document.getElementById('importOrderCode').value = '';
-            document.getElementById('importProductCode').value = '';
-            document.querySelector('input[name="importMode"][value="replace"]').checked = true;
-            importModalOverlay.style.display = 'flex';
-        }
-
-        function closeImportModal() {
-            importModalOverlay.style.display = 'none';
-        }
-
-        // Cập nhật tab mã hàng mà KHÔNG tự động load/ghi đè dữ liệu bảng (khác với fetchProducts)
-        async function refreshProductTabs(orderId, activeProductId) {
-            const token = localStorage.getItem('token');
-            const res = await fetch(`${API_BASE}/api/orders/${orderId}/products`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const products = await res.json();
-
-            productTabs.innerHTML = '';
-            products.forEach(product => {
-                setProductLockCache(product.id, product.is_locked);
-
-                const tab = document.createElement('div');
-                tab.className = `product-tab ${product.id == activeProductId ? 'active' : ''}`;
-                tab.dataset.productId = product.id;
-                tab.innerHTML = `
-                    ${product.is_locked ? '🔒 ' : ''}${product.product_code}
-                    <span class="delete-product" onclick="deleteProduct(${product.id}, event)">✕</span>
-                `;
-                tab.onclick = (e) => {
-                    if (!e.target.classList.contains('delete-product')) {
-                        selectProduct(product.id);
-                    }
-                };
-                productTabs.appendChild(tab);
-            });
-
-            return products;
-        }
-
-        // Tìm hoặc tạo đơn hàng + mã hàng dựa trên mã nhập từ file, rồi chuyển bảng sang đúng ngữ cảnh đó.
-        // Trả về true nếu thành công, false nếu có lỗi (đã hiển thị toast).
-        async function resolveOrderAndProduct(orderCode, productCode) {
-            const token = localStorage.getItem('token');
-            let orderId = currentOrderId;
-
-            if (orderCode) {
-                const foundOption = Array.from(orderSelect.options)
-                    .find(o => o.value && o.textContent.trim().toLowerCase() === orderCode.toLowerCase());
-
-                if (foundOption) {
-                    orderId = foundOption.value;
-                } else {
-                    const isAdmin = await checkPermissions();
-                    if (!isAdmin) {
-                        showToast(`⚠️ Không tìm thấy đơn hàng "${orderCode}" và bạn không có quyền tạo mới`, 'error');
-                        return false;
-                    }
-                    const res = await fetch(`${API_BASE}/api/orders`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                        body: JSON.stringify({ order_code: orderCode })
-                    });
-                    const data = await res.json();
-                    if (data.error) {
-                        showToast('❌ Lỗi tạo đơn hàng: ' + data.error, 'error');
-                        return false;
-                    }
-                    orderId = data.id;
-                    await fetchOrders();
-                    showToast(`✅ Đã tạo đơn hàng mới "${orderCode}"`, 'success');
-                }
-
-                currentOrderId = orderId;
-                orderSelect.value = orderId;
-                orderCodeInput.value = orderCode;
-                productsPanel.style.display = 'block';
-            }
-
-            if (!orderId) {
-                showToast('⚠️ Vui lòng chọn đơn hàng, hoặc nhập Mã đơn hàng trong ô nhập', 'warning');
-                return false;
-            }
-
-            const productsRes = await fetch(`${API_BASE}/api/orders/${orderId}/products`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const products = await productsRes.json();
-            products.forEach(p => setProductLockCache(p.id, p.is_locked));
-
-            let productId = currentProductId;
-
-            if (productCode) {
-                const existing = products.find(p => p.product_code.trim().toLowerCase() === productCode.toLowerCase());
-                if (existing) {
-                    productId = existing.id;
-                } else {
-                    const res = await fetch(`${API_BASE}/api/products`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                        body: JSON.stringify({ order_id: orderId, product_code: productCode })
-                    });
-                    const data = await res.json();
-                    if (data.error) {
-                        showToast('❌ Lỗi tạo mã hàng: ' + data.error, 'error');
-                        return false;
-                    }
-                    productId = data.id;
-                    showToast(`✅ Đã tạo mã hàng mới "${productCode}"`, 'success');
-                }
-            } else if (!productId && products.length > 0) {
-                productId = products[0].id;
-            }
-
-            if (!productId) {
-                showToast('⚠️ Đơn hàng chưa có mã hàng nào, vui lòng nhập Mã hàng để tạo mới', 'warning');
-                return false;
-            }
-
-            if (isProductLocked(productId)) {
-                showToast('🔒 Mã hàng này đã được xác nhận và khóa, không thể nhập thêm dữ liệu. Vui lòng nhờ admin mở khóa trước.', 'error');
-                return false;
-            }
-
-            currentProductId = productId;
-            await refreshProductTabs(orderId, productId);
-
-            const importMode = document.querySelector('input[name="importMode"]:checked').value;
-            if (importMode === 'append') {
-                // Tải dữ liệu đã lưu của mã hàng này trước, rồi mới nối thêm dòng import vào cuối
-                await loadProductData(productId);
-            } else {
-                tableBody.innerHTML = '';
-            }
-
-            return true;
-        }
-
-        function applyImportedRows(rows) {
-            const mode = document.querySelector('input[name="importMode"]:checked').value;
-
-            if (mode === 'replace') {
-                tableBody.innerHTML = '';
-                rows.forEach((row, idx) => {
-                    const newRow = createRow(idx + 1);
-                    tableBody.appendChild(newRow);
-                    const inputs = newRow.querySelectorAll('input');
-                    inputs[0].value = row.emptyCup || '';
-                    inputs[1].value = row.firstPour || '';
-                    inputs[3].value = row.secondPour || '';
-                });
-                if (rows.length === 0) initializeRows();
-                updateRowNumbers();
-            } else {
-                rows.forEach(row => {
-                    rowCount++;
-                    const newRow = createRow(rowCount);
-                    tableBody.appendChild(newRow);
-                    const inputs = newRow.querySelectorAll('input');
-                    inputs[0].value = row.emptyCup || '';
-                    inputs[1].value = row.firstPour || '';
-                    inputs[3].value = row.secondPour || '';
-                });
-                updateRowNumbers();
-            }
-
-            calculateAll();
-            autoSave();
-            showToast(`✅ Đã nhập ${rows.length} dòng dữ liệu`, 'success');
-        }
-
-        importDropzone.addEventListener('click', () => importFileInput.click());
-
-        importDropzone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            importDropzone.classList.add('dragover');
-        });
-
-        importDropzone.addEventListener('dragleave', () => {
-            importDropzone.classList.remove('dragover');
-        });
-
-        importDropzone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            importDropzone.classList.remove('dragover');
-            const file = e.dataTransfer.files[0];
-            if (file) handleImportFile(file);
-        });
-
-        importFileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) handleImportFile(file);
-        });
-
-        confirmImportBtn.addEventListener('click', async () => {
-            if (parsedImportRows.length === 0) return;
-
-            const orderCode = document.getElementById('importOrderCode').value.trim();
-            const productCode = document.getElementById('importProductCode').value.trim();
-
-            const originalLabel = confirmImportBtn.innerHTML;
-            confirmImportBtn.disabled = true;
-            confirmImportBtn.innerHTML = '⏳ Đang xử lý...';
-            showLoading();
-
-            try {
-                const ok = await resolveOrderAndProduct(orderCode, productCode);
-                if (!ok) return;
-
-                applyImportedRows(parsedImportRows);
-                await saveOrder(true);
-                showToast('💾 Đã nhập và lưu dữ liệu vào đơn hàng/mã hàng', 'success');
-                closeImportModal();
-            } catch (err) {
-                console.error(err);
-                showToast('❌ Lỗi khi nhập đơn hàng/mã hàng', 'error');
-            } finally {
-                hideLoading();
-                confirmImportBtn.disabled = false;
-                confirmImportBtn.innerHTML = originalLabel;
-            }
-        });
-
-        cancelImportBtn.addEventListener('click', closeImportModal);
-        importModalOverlay.addEventListener('click', (e) => {
-            if (e.target === importModalOverlay) closeImportModal();
-        });
-
-        document.getElementById('importBtn').addEventListener('click', openImportModal);
-
-        // ==================== CONFIRM / LOCK DATA FUNCTIONS ====================
-        const tableWrapperEl = document.querySelector('.table-wrapper');
-        const lockBanner = document.getElementById('lockBanner');
-        const confirmDataBtn = document.getElementById('confirmDataBtn');
-        const unlockDataBtn = document.getElementById('unlockDataBtn');
-
-        // Trạng thái khóa lấy từ server (cột is_locked trong bảng products), cache theo productId
-        const productLockMap = new Map();
-
-        function setProductLockCache(productId, locked) {
-            productLockMap.set(String(productId), !!locked);
-        }
-
-        function isProductLocked(productId) {
-            if (!productId) return false;
-            return productLockMap.get(String(productId)) === true;
-        }
-
-        function lockTableUI() {
-            document.querySelectorAll('#tableBody input.data-input').forEach(inp => inp.readOnly = true);
-            document.querySelectorAll('#tableBody td button').forEach(btn => btn.disabled = true);
-            document.getElementById('addRowBtn').disabled = true;
-            document.getElementById('importBtn').disabled = true;
-            document.getElementById('saveBtn').disabled = true;
-            document.getElementById('calcAllBtn').disabled = true;
-            tableWrapperEl.classList.add('locked');
-        }
-
-        function unlockTableUI() {
-            document.querySelectorAll('#tableBody input.data-input').forEach(inp => inp.readOnly = false);
-            document.querySelectorAll('#tableBody td button').forEach(btn => btn.disabled = false);
-            document.getElementById('addRowBtn').disabled = false;
-            document.getElementById('importBtn').disabled = false;
-            document.getElementById('saveBtn').disabled = false;
-            document.getElementById('calcAllBtn').disabled = false;
-            tableWrapperEl.classList.remove('locked');
-        }
-
-        // Đồng bộ giao diện (banner, nút, khóa input) theo trạng thái khóa của mã hàng đang xem
-        function applyLockStateForCurrentProduct() {
-            const locked = isProductLocked(currentProductId);
-
-            if (locked) {
-                lockTableUI();
-                lockBanner.style.display = 'flex';
-                confirmDataBtn.disabled = true;
-                confirmDataBtn.innerHTML = '🔒 Đã xác nhận';
-                unlockDataBtn.style.display = isAdminUser ? 'inline-block' : 'none';
-            } else {
-                unlockTableUI();
-                lockBanner.style.display = 'none';
-                confirmDataBtn.disabled = !currentProductId;
-                confirmDataBtn.innerHTML = '✅ Xác nhận số liệu';
-            }
-        }
-
-        async function confirmDataHandler() {
-            if (!currentProductId) {
-                showToast('⚠️ Vui lòng chọn mã hàng trước khi xác nhận', 'warning');
-                return;
-            }
-            if (isProductLocked(currentProductId)) return;
-
-            if (!confirm('Xác nhận số liệu?\n\nSau khi xác nhận, bạn sẽ KHÔNG thể chỉnh sửa dữ liệu này nữa (trừ khi admin mở khóa).')) {
-                return;
-            }
-
-            showLoading();
-            try {
-                // Lưu lại dữ liệu mới nhất trước khi khóa
-                await saveOrder(true);
-
-                const token = localStorage.getItem('token');
-                const res = await fetch(`${API_BASE}/api/products/${currentProductId}/lock`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const result = await res.json();
-
-                if (!res.ok || result.error) {
-                    showToast('❌ Lỗi khi khóa: ' + (result.error || 'Không rõ nguyên nhân'), 'error');
-                    return;
-                }
-
-                setProductLockCache(currentProductId, true);
-                applyLockStateForCurrentProduct();
-                showToast('🔒 Đã xác nhận, số liệu hiện đã được khóa', 'success');
-            } catch (err) {
-                console.error(err);
-                showToast('❌ Không thể kết nối server', 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        async function unlockDataHandler() {
-            const isAdmin = await checkPermissions();
-            if (!isAdmin) {
-                showToast('⚠️ Chỉ admin mới có quyền mở khóa', 'error');
-                return;
-            }
-            if (!currentProductId) return;
-            if (!confirm('Mở khóa để chỉnh sửa lại số liệu này?')) return;
-
-            showLoading();
-            try {
-                const token = localStorage.getItem('token');
-                const res = await fetch(`${API_BASE}/api/products/${currentProductId}/unlock`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const result = await res.json();
-
-                if (!res.ok || result.error) {
-                    showToast('❌ Lỗi khi mở khóa: ' + (result.error || 'Không rõ nguyên nhân'), 'error');
-                    return;
-                }
-
-                setProductLockCache(currentProductId, false);
-                applyLockStateForCurrentProduct();
-                showToast('🔓 Đã mở khóa, có thể chỉnh sửa lại', 'info');
-            } catch (err) {
-                console.error(err);
-                showToast('❌ Không thể kết nối server', 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        confirmDataBtn.addEventListener('click', confirmDataHandler);
-        unlockDataBtn.addEventListener('click', unlockDataHandler);
 
         // ==================== LAN IPs ====================
         async function displayLANIPs() {
