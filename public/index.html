@@ -2367,12 +2367,12 @@
             let csv = `Mã đơn hàng,${orderCodeInput.value || ''}\n`;
             csv += `Mã hàng,${productCode}\n`;
             csv += `Ngày xuất,${new Date().toLocaleString('vi-VN')}\n\n`;
-            csv += "STT,Cốc không (g),Tổng Rót lần 1 (g),Sáp lần 1 (g),Tổng Rót lần 2 (g),Sáp lần 2 (g),Tổng sáp (g)\n";
+            csv += "STT,Cốc không (g),Tổng Rót lần 1 (g),Sáp lần 1 rót (g),Tổng Rót lần 2 (g),Tổng sáp (g),Sáp lần 2 rót (g)\n";
 
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
                 // inputs: [0] emptyCup, [1] firstPour, [2] netWax1, [3] secondPour, [4] netWax2, [5] diff
-                csv += `${idx+1},${inputs[0].value || ''},${inputs[1].value || ''},${inputs[2].value || ''},${inputs[3].value || ''},${inputs[5].value || ''},${inputs[4].value || ''}\n`;
+                csv += `${idx+1},${inputs[0].value || ''},${inputs[1].value || ''},${inputs[2].value || ''},${inputs[3].value || ''},${inputs[4].value || ''},${inputs[5].value || ''}\n`;
             });
 
             csv += `\nTổng mẫu,${document.getElementById('totalSamples').textContent}\n`;
@@ -2395,11 +2395,11 @@
             text += `MÃ HÀNG: ${productCode}\n`;
             text += `THỜI GIAN: ${new Date().toLocaleString('vi-VN')}\n\n`;
             
-            text += "STT\tCốc không\tTổng Rót lần 1 (g)\tSáp lần 1 (g)\tTổng Rót lần 2 (g)\tSáp lần 2 (g)\tTổng sáp (g)\n";
+            text += "STT\tCốc không\tTổng Rót lần 1 (g)\tSáp lần 1 rót (g)\tTổng Rót lần 2 (g)\tTổng sáp (g)\tSáp lần 2 rót (g)\n";
             
             document.querySelectorAll('#tableBody tr').forEach((row, idx) => {
                 const inputs = row.querySelectorAll('input');
-                text += `${idx+1}\t${inputs[0].value || '0'}\t${inputs[1].value || '0'}\t${inputs[2].value || '0'}\t${inputs[3].value || '0'}\t${inputs[5].value || '0'}\t${inputs[4].value || '0'}\n`;
+                text += `${idx+1}\t${inputs[0].value || '0'}\t${inputs[1].value || '0'}\t${inputs[2].value || '0'}\t${inputs[3].value || '0'}\t${inputs[4].value || '0'}\t${inputs[5].value || '0'}\n`;
             });
             
             text += `\nTỔNG KẾT:\n`;
