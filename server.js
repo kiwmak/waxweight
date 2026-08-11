@@ -280,7 +280,7 @@ app.get('/api/orders/:orderId/products', requireAuth, async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('products')
-            .select('id, product_code, created_at, is_locked, locked_at, locked_by')
+            .select('id, product_code, created_at')
             .eq('order_id', req.params.orderId)
             .order('created_at', { ascending: true });
         
@@ -327,54 +327,6 @@ app.delete('/api/products/:id', requireAuth, async (req, res) => {
     }
 });
 
-// ==================== LOCK / UNLOCK PRODUCT (XÁC NHẬN SỐ LIỆU) ====================
-
-// Khóa mã hàng (xác nhận số liệu) - bất kỳ user đã đăng nhập nào cũng có thể khóa
-app.post('/api/products/:id/lock', requireAuth, async (req, res) => {
-    try {
-        const { data, error } = await supabase
-            .from('products')
-            .update({
-                is_locked: true,
-                locked_by: req.user.id,
-                locked_at: new Date().toISOString()
-            })
-            .eq('id', req.params.id)
-            .select('id, product_code, is_locked, locked_at, locked_by')
-            .single();
-
-        if (error) throw error;
-
-        res.json({ success: true, product: data });
-    } catch (err) {
-        console.error('❌ Lock product error:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// Mở khóa mã hàng - CHỈ ADMIN
-app.post('/api/products/:id/unlock', requireAuth, requireAdmin, async (req, res) => {
-    try {
-        const { data, error } = await supabase
-            .from('products')
-            .update({
-                is_locked: false,
-                locked_by: null,
-                locked_at: null
-            })
-            .eq('id', req.params.id)
-            .select('id, product_code, is_locked')
-            .single();
-
-        if (error) throw error;
-
-        res.json({ success: true, product: data });
-    } catch (err) {
-        console.error('❌ Unlock product error:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
 // ==================== WAX DATA API ====================
 
 // Lấy dữ liệu wax của sản phẩm
@@ -399,19 +351,6 @@ app.post('/api/products/:productId/data', requireAuth, async (req, res) => {
     const productId = req.params.productId;
     
     try {
-        // Kiểm tra khóa trước khi cho phép lưu
-        const { data: product, error: productError } = await supabase
-            .from('products')
-            .select('is_locked')
-            .eq('id', productId)
-            .single();
-
-        if (productError) throw productError;
-
-        if (product && product.is_locked) {
-            return res.status(403).json({ error: 'Mã hàng này đã được xác nhận và khóa, không thể lưu thay đổi' });
-        }
-
         // Xóa dữ liệu cũ
         await supabase
             .from('wax_data')
