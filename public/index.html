@@ -1777,8 +1777,8 @@
 
             return {
                 totalSamples: countFilled,
-                totalWaxWeight: sumNet1 + sumNet2,
-                totalDifference: sumDiff
+                totalWaxWeight: sumNet1 + sumDiff,
+                //totalDifference: sumDiff
             };
         }
 
@@ -1786,7 +1786,7 @@
             const stats = calculateTotals();
             document.getElementById('totalSamples').textContent = stats.totalSamples;
             document.getElementById('totalWaxWeight').textContent = stats.totalWaxWeight.toFixed(2) + 'g';
-            document.getElementById('totalDifferenceStat').textContent = stats.totalDifference.toFixed(2) + 'g';
+            //document.getElementById('totalDifferenceStat').textContent = stats.totalDifference.toFixed(2) + 'g';
             
             // Có thể cập nhật chart nếu muốn, nhưng tạm thời bỏ qua
             // updateChart();
