@@ -1521,6 +1521,40 @@
             window.location.href = '/admin/users.html';
         }
 
+        // ==================== ENTER = NHẢY XUỐNG CÙNG CỘT (KIỂU EXCEL) ====================
+        function handleEnterNavigate(e) {
+            if (e.key !== 'Enter') return;
+            e.preventDefault(); // chặn hành vi mặc định (submit form/xuống dòng)
+
+            const input = e.target;
+            const currentRow = input.closest('tr');
+            if (!currentRow) return;
+
+            let nextRow = currentRow.nextElementSibling;
+
+            // Nếu đang ở hàng cuối cùng, tự động thêm 1 hàng mới để nhập tiếp
+            if (!nextRow) {
+                rowCount++;
+                nextRow = createRow(rowCount);
+                tableBody.appendChild(nextRow);
+                updateRowNumbers();
+            }
+
+            // Xác định cột hiện tại để nhảy đúng cột ở hàng dưới
+            let selector = null;
+            if (input.classList.contains('empty-cup')) selector = '.empty-cup';
+            else if (input.classList.contains('first-pour')) selector = '.first-pour';
+            else if (input.classList.contains('second-pour')) selector = '.second-pour';
+
+            if (selector) {
+                const nextInput = nextRow.querySelector(selector);
+                if (nextInput && !nextInput.disabled) {
+                    nextInput.focus();
+                    nextInput.select();
+                }
+            }
+        }
+
         // ==================== TABLE FUNCTIONS ====================
         function createRow(rowNumber) {
             const row = document.createElement('tr');
@@ -1541,6 +1575,7 @@
             emptyCupInput.placeholder = '0.0';
             emptyCupInput.inputMode = 'decimal';
             emptyCupInput.addEventListener('input', handleInput);
+            emptyCupInput.addEventListener('keydown', handleEnterNavigate);
             
             const copyEmptyBtn = document.createElement('button');
             copyEmptyBtn.className = 'copy-btn';
@@ -1566,6 +1601,7 @@
             firstPourInput.placeholder = '0.0';
             firstPourInput.inputMode = 'decimal';
             firstPourInput.addEventListener('input', handleInput);
+            firstPourInput.addEventListener('keydown', handleEnterNavigate);
             
             const copyFirstBtn = document.createElement('button');
             copyFirstBtn.className = 'copy-btn';
@@ -1603,6 +1639,7 @@
             secondPourInput.placeholder = '0.0';
             secondPourInput.inputMode = 'decimal';
             secondPourInput.addEventListener('input', handleInput);
+            secondPourInput.addEventListener('keydown', handleEnterNavigate);
             
             const copySecondBtn = document.createElement('button');
             copySecondBtn.className = 'copy-btn';

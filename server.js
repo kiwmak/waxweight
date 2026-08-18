@@ -8,6 +8,8 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const fs = require('fs');
 const multer = require('multer');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
@@ -34,15 +36,88 @@ const BACKUP_DIR = path.join(__dirname, 'backups');
 if (!fs.existsSync(BACKUP_DIR)) {
     fs.mkdirSync(BACKUP_DIR, { recursive: true });
 }
+// ==================== BẢO MẬT: DANH SÁCH ORIGIN ĐƯỢC PHÉP ====================
+// Đặt biến ALLOWED_ORIGINS trong .env, phân tách bằng dấu phẩy.
+// Ví dụ: ALLOWED_ORIGINS=https://waxweight.example.com,http://localhost:3000
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map(o => o.trim())
+    .filter(Boolean);
+
+if (allowedOrigins.length === 0) {
+    console.warn('\n⚠️  CẢNH BÁO: Chưa cấu hình ALLOWED_ORIGINS trong .env');
+    console.warn('   Tạm thời chỉ cho phép truy cập từ localhost/LAN.');
+    console.warn('   Thêm ALLOWED_ORIGINS=https://your-domain.com vào .env khi deploy production.\n');
+}
+
+function isOriginAllowed(origin) {
+    if (!origin) return true; // request không có Origin (Postman, curl, server-to-server)
+    if (allowedOrigins.includes(origin)) return true;
+    // Cho phép mọi origin trong mạng LAN / localhost khi dev (không cấu hình ALLOWED_ORIGINS)
+    if (allowedOrigins.length === 0) {
+        return /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\]|(\d{1,3}\.){3}\d{1,3})(:\d+)?$/.test(origin);
+    }
+    return false;
+}
+
 // Middleware
 app.use(compression());
+
+// Helmet: security headers + CSP.
+// Ứng dụng dùng nhiều inline <script>/<style> và onclick="", nên tạm thời
+// phải cho phép 'unsafe-inline'. CDN jsdelivr được whitelist cho chart.js/xlsx.
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", 'data:', 'blob:'],
+            connectSrc: ["'self'"],
+            fontSrc: ["'self'", 'data:'],
+            objectSrc: ["'none'"],
+            baseUri: ["'self'"],
+            frameAncestors: ["'none'"]
+        }
+    },
+    crossOriginEmbedderPolicy: false
+}));
+
 app.use(cors({
-    origin: true,
+    origin: (origin, callback) => {
+        if (isOriginAllowed(origin)) {
+            callback(null, true);
+        } else {
+            console.warn(`⛔ CORS chặn origin: ${origin}`);
+            callback(null, false); // không set header CORS, browser sẽ tự chặn response
+        }
+    },
     credentials: true
 }));
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// ==================== RATE LIMITING ====================
+// Chống brute-force đăng nhập
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 phút
+    max: 10, // tối đa 10 lần thử / IP / 15 phút
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Quá nhiều lần đăng nhập thất bại. Vui lòng thử lại sau 15 phút.' },
+    skipSuccessfulRequests: true
+});
+
+// Giới hạn chung cho toàn bộ API, chống lạm dụng/DoS cơ bản
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 600, // 600 request / IP / 15 phút
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Quá nhiều yêu cầu, vui lòng thử lại sau.' }
+});
+app.use('/api/', apiLimiter);
 
 // Request logging
 app.use((req, res, next) => {
@@ -74,10 +149,14 @@ app.get('/api/ips', (req, res) => {
 // ==================== AUTHENTICATION API ====================
 
 // Đăng nhập
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', loginLimiter, async (req, res) => {
     console.log('\n🔑 Login attempt:', req.body.username);
     
     const { username, password, remember } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Vui lòng nhập tên đăng nhập và mật khẩu' });
+    }
     
     try {
         const { data: user, error } = await supabase
@@ -98,13 +177,25 @@ app.post('/api/auth/login', async (req, res) => {
         if (!validPassword) {
             return res.status(401).json({ error: 'Tên đăng nhập hoặc mật khẩu không đúng' });
         }
-        
-        const token = generateToken(user);
+
+        // "Ghi nhớ đăng nhập" -> phiên dài hơn (7 ngày), ngược lại phiên ngắn (12 giờ)
+        const expiresIn = remember ? '7d' : '12h';
+        const token = generateToken(user, expiresIn);
         
         await supabase
             .from('users')
             .update({ last_login: new Date().toISOString() })
             .eq('id', user.id);
+
+        // Đồng thời set httpOnly cookie (bước đệm để dần bỏ localStorage ở frontend).
+        // Cookie này an toàn hơn localStorage vì JS phía client không đọc được.
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: remember ? 7 * 24 * 60 * 60 * 1000 : 12 * 60 * 60 * 1000,
+            path: '/'
+        });
         
         res.json({
             success: true,
@@ -126,7 +217,12 @@ app.post('/api/auth/login', async (req, res) => {
 
 // Đăng xuất
 app.post('/api/auth/logout', requireAuth, async (req, res) => {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/'
+    });
     res.json({ success: true });
 });
 

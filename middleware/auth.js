@@ -59,7 +59,8 @@ const requireAdmin = (req, res, next) => {
 };
 
 // Tạo JWT token
-const generateToken = (user) => {
+// expiresIn mặc định 7 ngày nếu không truyền vào (giữ tương thích ngược)
+const generateToken = (user, expiresIn = '7d') => {
     return jwt.sign(
         { 
             id: user.id, 
@@ -67,7 +68,7 @@ const generateToken = (user) => {
             role: user.role 
         }, 
         JWT_SECRET, 
-        { expiresIn: '7d' }
+        { expiresIn }
     );
 };
 
