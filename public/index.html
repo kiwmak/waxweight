@@ -1600,6 +1600,7 @@
         // ---- Thanh nút "⬇ Ô tiếp theo" cho mobile (bàn phím số không có Enter) ----
         let activeDataInput = null;
         let hideNavBarTimeout = null;
+        let scrollIntoViewTimeout = null;
         const mobileNavBar = document.getElementById('mobileNavBar');
         const mobileNavNextBtn = document.getElementById('mobileNavNextBtn');
 
@@ -1611,6 +1612,18 @@
             mobileNavBar.style.bottom = offsetBottom + 'px';
         }
 
+        // Chủ động cuộn ô đang nhập vào giữa màn hình, tránh bị bàn phím số che mất
+        // (khi bấm vào 1 ô ở phía trên, Safari mobile không phải lúc nào cũng tự cuộn đúng
+        // sau khi bàn phím đã mở hoàn toàn, đặc biệt khi trang có thanh nút cố định ở đáy).
+        function scheduleScrollActiveInputIntoView(input) {
+            if (scrollIntoViewTimeout) clearTimeout(scrollIntoViewTimeout);
+            scrollIntoViewTimeout = setTimeout(() => {
+                if (input && input === activeDataInput) {
+                    input.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                }
+            }, 320); // đợi bàn phím mở/đóng animation xong (~iOS ~300ms) rồi mới cuộn
+        }
+
         function showMobileNavBar(input) {
             if (hideNavBarTimeout) {
                 clearTimeout(hideNavBarTimeout);
@@ -1619,6 +1632,7 @@
             activeDataInput = input;
             mobileNavBar.classList.add('show');
             positionMobileNavBar();
+            scheduleScrollActiveInputIntoView(input);
         }
 
         function hideMobileNavBar() {
@@ -1636,7 +1650,11 @@
         }
 
         if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', positionMobileNavBar);
+            window.visualViewport.addEventListener('resize', () => {
+                positionMobileNavBar();
+                // Khi bàn phím đóng/mở làm viewport đổi kích thước, cuộn lại ô đang nhập cho chắc
+                if (activeDataInput) scheduleScrollActiveInputIntoView(activeDataInput);
+            });
             window.visualViewport.addEventListener('scroll', positionMobileNavBar);
         }
 
