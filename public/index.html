@@ -1599,6 +1599,7 @@
 
         // ---- Thanh nút "⬇ Ô tiếp theo" cho mobile (bàn phím số không có Enter) ----
         let activeDataInput = null;
+        let hideNavBarTimeout = null;
         const mobileNavBar = document.getElementById('mobileNavBar');
         const mobileNavNextBtn = document.getElementById('mobileNavNextBtn');
 
@@ -1611,6 +1612,10 @@
         }
 
         function showMobileNavBar(input) {
+            if (hideNavBarTimeout) {
+                clearTimeout(hideNavBarTimeout);
+                hideNavBarTimeout = null;
+            }
             activeDataInput = input;
             mobileNavBar.classList.add('show');
             positionMobileNavBar();
@@ -1621,17 +1626,33 @@
             mobileNavBar.style.bottom = '0px';
         }
 
+        // Trì hoãn việc ẩn thanh nút một chút khi mất focus, để kịp xử lý cú chạm vào nút
+        // (chạm vào nút có thể làm ô input mất focus TRƯỚC KHI sự kiện click/touchend kịp bắn ra)
+        function scheduleHideMobileNavBar() {
+            hideNavBarTimeout = setTimeout(() => {
+                hideMobileNavBar();
+                hideNavBarTimeout = null;
+            }, 250);
+        }
+
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', positionMobileNavBar);
             window.visualViewport.addEventListener('scroll', positionMobileNavBar);
         }
 
-        // Ngăn ô input bị mất focus khi chạm vào nút (nếu không bàn phím sẽ tự đóng trước khi kịp bấm)
-        mobileNavNextBtn.addEventListener('mousedown', (e) => e.preventDefault());
-        mobileNavNextBtn.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
-        mobileNavNextBtn.addEventListener('click', () => {
+        function goToNextRowFromNavBar() {
             if (activeDataInput) navigateToNextRow(activeDataInput);
+        }
+
+        // Dùng touchend (thay vì mousedown/touchstart + preventDefault) vì preventDefault trên
+        // touchstart sẽ chặn luôn sự kiện click theo sau trên nhiều trình duyệt di động (iOS Safari).
+        mobileNavNextBtn.addEventListener('touchend', (e) => {
+            e.preventDefault(); // chặn cú click "ma" lặp lại ngay sau đó, tránh nhảy 2 hàng
+            goToNextRowFromNavBar();
         });
+        // click vẫn giữ lại cho chuột (desktop/trackpad); trên cảm ứng, touchend đã preventDefault
+        // nên click sẽ không bắn lần nữa, không lo chạy 2 lần.
+        mobileNavNextBtn.addEventListener('click', goToNextRowFromNavBar);
 
         // ==================== TABLE FUNCTIONS ====================
         function createRow(rowNumber) {
@@ -1655,7 +1676,7 @@
             emptyCupInput.addEventListener('input', handleInput);
             emptyCupInput.addEventListener('keydown', handleEnterNavigate);
             emptyCupInput.addEventListener('focus', () => showMobileNavBar(emptyCupInput));
-            emptyCupInput.addEventListener('blur', hideMobileNavBar);
+            emptyCupInput.addEventListener('blur', scheduleHideMobileNavBar);
             
             const copyEmptyBtn = document.createElement('button');
             copyEmptyBtn.className = 'copy-btn';
@@ -1683,7 +1704,7 @@
             firstPourInput.addEventListener('input', handleInput);
             firstPourInput.addEventListener('keydown', handleEnterNavigate);
             firstPourInput.addEventListener('focus', () => showMobileNavBar(firstPourInput));
-            firstPourInput.addEventListener('blur', hideMobileNavBar);
+            firstPourInput.addEventListener('blur', scheduleHideMobileNavBar);
             
             const copyFirstBtn = document.createElement('button');
             copyFirstBtn.className = 'copy-btn';
@@ -1723,7 +1744,7 @@
             secondPourInput.addEventListener('input', handleInput);
             secondPourInput.addEventListener('keydown', handleEnterNavigate);
             secondPourInput.addEventListener('focus', () => showMobileNavBar(secondPourInput));
-            secondPourInput.addEventListener('blur', hideMobileNavBar);
+            secondPourInput.addEventListener('blur', scheduleHideMobileNavBar);
             
             const copySecondBtn = document.createElement('button');
             copySecondBtn.className = 'copy-btn';
