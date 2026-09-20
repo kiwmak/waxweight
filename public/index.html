@@ -277,10 +277,18 @@
 
         .search-box input {
             width: 100%;
-            padding: 12px;
+            padding: 14px 18px;
             border: 2px solid #c8e6c9;
             border-radius: 30px;
-            font-size: 14px;
+            font-size: 16px;
+            background: white;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
         }
 
         .dark-mode .search-box input {
@@ -791,19 +799,6 @@
             color: white;
         }
 
-        /* Advanced Search Panel */
-        #advancedSearchPanel {
-            animation: slideDown 0.3s ease;
-            margin-top: 15px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 12px;
-        }
-
-        .dark-mode #advancedSearchPanel {
-            background: #3d3d3d;
-        }
-
         /* Search Highlight */
         mark {
             background: #ffeb3b;
@@ -1236,29 +1231,7 @@
                     
                     <!-- Search Section -->
                     <div class="search-box">
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="text" id="searchOrder" placeholder="🔍 Tìm kiếm đơn hàng..." style="flex: 1;">
-                            <button id="advancedSearchBtn" style="padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 30px; cursor: pointer;">🔧 Nâng cao</button>
-                        </div>
-                        
-                        <!-- Advanced Search Panel -->
-                        <div id="advancedSearchPanel" style="display: none;">
-                            <h4 style="margin-bottom: 10px; color: #333;">Tìm kiếm nâng cao</h4>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <div style="flex: 1; min-width: 200px;">
-                                    <label style="display: block; margin-bottom: 5px; color: #666;">Từ ngày:</label>
-                                    <input type="date" id="searchFromDate" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
-                                </div>
-                                <div style="flex: 1; min-width: 200px;">
-                                    <label style="display: block; margin-bottom: 5px; color: #666;">Đến ngày:</label>
-                                    <input type="date" id="searchToDate" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
-                                </div>
-                                <div style="display: flex; align-items: flex-end; gap: 10px;">
-                                    <button id="applyAdvancedSearch" style="padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 8px; cursor: pointer;">Áp dụng</button>
-                                    <button id="clearAdvancedSearch" style="padding: 10px 20px; background: #9e9e9e; color: white; border: none; border-radius: 8px; cursor: pointer;">Xóa</button>
-                                </div>
-                            </div>
-                        </div>
+                        <input type="text" id="searchOrder" placeholder="🔍 Tìm kiếm đơn hàng..." style="width: 100%;">
                     </div>
                 </div>
                 
@@ -2239,81 +2212,6 @@
             }
         }
 
-        // Advanced Search
-        const advancedSearchBtn = document.getElementById('advancedSearchBtn');
-        const advancedSearchPanel = document.getElementById('advancedSearchPanel');
-
-        advancedSearchBtn.addEventListener('click', () => {
-            const isVisible = advancedSearchPanel.style.display === 'block';
-            advancedSearchPanel.style.display = isVisible ? 'none' : 'block';
-            advancedSearchBtn.textContent = isVisible ? '🔧 Nâng cao' : '✕ Đóng';
-        });
-
-        document.getElementById('applyAdvancedSearch').addEventListener('click', async () => {
-            const keyword = document.getElementById('searchOrder').value.trim();
-            const fromDate = document.getElementById('searchFromDate').value;
-            const toDate = document.getElementById('searchToDate').value;
-            
-            if (!keyword && !fromDate && !toDate) {
-                showToast('Vui lòng nhập ít nhất một điều kiện tìm kiếm', 'warning');
-                return;
-            }
-            
-            showLoading();
-            
-            try {
-                const token = localStorage.getItem('token');
-                let url = `${API_BASE}/api/orders/advanced-search?`;
-                if (keyword) url += `keyword=${encodeURIComponent(keyword)}&`;
-                if (fromDate) url += `fromDate=${fromDate}&`;
-                if (toDate) url += `toDate=${toDate}`;
-                
-                const response = await fetch(url, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const results = await response.json();
-                
-                updateOrderDropdown(results);
-                
-                showToast(`🔍 Tìm thấy ${results.length} đơn hàng`, 'success');
-                advancedSearchPanel.style.display = 'none';
-                
-            } catch (err) {
-                showToast('❌ Lỗi tìm kiếm nâng cao', 'error');
-                console.error(err);
-            } finally {
-                hideLoading();
-            }
-        });
-
-        document.getElementById('clearAdvancedSearch').addEventListener('click', () => {
-            document.getElementById('searchFromDate').value = '';
-            document.getElementById('searchToDate').value = '';
-            document.getElementById('searchOrder').value = '';
-            fetchOrders();
-        });
-
-        function updateOrderDropdown(orders) {
-            const currentValue = orderSelect.value;
-            
-            while (orderSelect.options.length > 1) {
-                orderSelect.remove(1);
-            }
-            
-            orders.forEach(order => {
-                const option = document.createElement('option');
-                option.value = order.id;
-                option.textContent = `${order.order_code} (${new Date(order.created_at).toLocaleDateString('vi-VN')})`;
-                orderSelect.appendChild(option);
-            });
-            
-            if (currentValue && orders.some(o => o.id.toString() === currentValue)) {
-                orderSelect.value = currentValue;
-            }
-            updateOrderInputOptions();
-            syncOrderInputFromSelect();
-        }
-
         // Quick Filters
         function addQuickFilters() {
             const filterDiv = document.createElement('div');
@@ -2338,28 +2236,7 @@
         }
 
         async function quickFilter(type) {
-            const today = new Date();
-            let fromDate = null;
-            
-            switch(type) {
-                case 'today':
-                    fromDate = today.toISOString().split('T')[0];
-                    break;
-                case 'week':
-                    fromDate = new Date(today.setDate(today.getDate() - 7)).toISOString().split('T')[0];
-                    break;
-                case 'month':
-                    fromDate = new Date(today.setMonth(today.getMonth() - 1)).toISOString().split('T')[0];
-                    break;
-            }
-            
-            if (fromDate) {
-                document.getElementById('searchFromDate').value = fromDate;
-                document.getElementById('searchToDate').value = new Date().toISOString().split('T')[0];
-                document.getElementById('applyAdvancedSearch').click();
-            } else {
-                fetchOrders();
-            }
+            fetchOrders();
         }
 
         // ==================== API FUNCTIONS ====================
