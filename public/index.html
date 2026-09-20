@@ -271,27 +271,8 @@
             color: #81c784;
         }
 
-        .search-box {
-            margin-top: 10px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #c8e6c9;
-            border-radius: 30px;
-            font-size: 16px;
-            background: white;
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        .search-box input:focus {
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
-        }
-
-        .dark-mode .search-box input {
+        .dark-mode select,
+        .dark-mode .order-panel input {
             background: #3d3d3d;
             color: white;
             border-color: #4CAF50;
@@ -304,13 +285,6 @@
             border-radius: 30px;
             font-size: 16px;
             background: white;
-        }
-
-        .dark-mode select,
-        .dark-mode .order-panel input {
-            background: #3d3d3d;
-            color: white;
-            border-color: #4CAF50;
         }
 
         .order-actions {
@@ -766,52 +740,6 @@
             color: #bbb;
         }
 
-        /* Quick Filters */
-        .quick-filters {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            border: 1px solid #4CAF50;
-            background: white;
-            color: #4CAF50;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .dark-mode .filter-btn {
-            background: #3d3d3d;
-            color: #4CAF50;
-        }
-
-        .filter-btn:hover {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .filter-btn.active {
-            background: #4CAF50;
-            color: white;
-        }
-
-        /* Search Highlight */
-        mark {
-            background: #ffeb3b;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        .dark-mode mark {
-            background: #ffb74d;
-            color: #000;
-        }
-
         /* Footer */
         .footer {
             text-align: center;
@@ -1228,11 +1156,6 @@
                             <option value="">-- Chọn đơn hàng --</option>
                         </select>
                     </div>
-                    
-                    <!-- Search Section -->
-                    <div class="search-box">
-                        <input type="text" id="searchOrder" placeholder="🔍 Tìm kiếm đơn hàng..." style="width: 100%;">
-                    </div>
                 </div>
                 
                 <div class="order-actions">
@@ -1615,7 +1538,6 @@
                 applyLockStateForCurrentProduct();
                 fetchOrders();
                 displayLANIPs();
-                addQuickFilters();
 
             } catch (error) {
                 console.error('Auth check error:', error);
@@ -2120,124 +2042,6 @@
         });
 
         orderSelect.addEventListener('change', syncOrderInputFromSelect);
-
-        // ==================== SEARCH FUNCTIONS ====================
-        const searchOrderInput = document.getElementById('searchOrder');
-        let searchTimeout;
-
-        searchOrderInput.addEventListener('input', function(e) {
-            clearTimeout(searchTimeout);
-            const searchTerm = e.target.value.trim();
-            
-            searchTimeout = setTimeout(() => {
-                if (searchTerm.length >= 2 || searchTerm.length === 0) {
-                    filterOrders(searchTerm);
-                }
-            }, 300);
-        });
-
-        async function filterOrders(searchTerm) {
-            const options = orderSelect.querySelectorAll('option');
-            
-            if (searchTerm === '') {
-                options.forEach(opt => {
-                    if (opt.value !== '') {
-                        opt.style.display = 'block';
-                        opt.innerHTML = opt.textContent;
-                    }
-                });
-                return;
-            }
-            
-            orderSelect.style.opacity = '0.6';
-            
-            try {
-                const token = localStorage.getItem('token');
-                const response = await fetch(`${API_BASE}/api/orders/search?keyword=${encodeURIComponent(searchTerm)}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const searchResults = await response.json();
-                
-                const resultIds = new Set(searchResults.map(r => r.id.toString()));
-                
-                options.forEach(opt => {
-                    if (opt.value === '') return;
-                    
-                    if (resultIds.has(opt.value)) {
-                        opt.style.display = 'block';
-                        const text = opt.textContent;
-                        const regex = new RegExp(`(${searchTerm})`, 'gi');
-                        opt.innerHTML = text.replace(regex, '<mark>$1</mark>');
-                    } else {
-                        opt.style.display = 'none';
-                    }
-                });
-                
-                const resultCount = searchResults.length;
-                if (resultCount > 0) {
-                    showToast(`🔍 Tìm thấy ${resultCount} đơn hàng`, 'info');
-                } else {
-                    showToast('❌ Không tìm thấy đơn hàng', 'warning');
-                }
-                
-            } catch (err) {
-                console.error('Lỗi tìm kiếm:', err);
-                filterOrdersClientSide(searchTerm);
-            } finally {
-                orderSelect.style.opacity = '1';
-            }
-        }
-
-        function filterOrdersClientSide(searchTerm) {
-            const options = orderSelect.querySelectorAll('option');
-            const searchLower = searchTerm.toLowerCase();
-            let matchCount = 0;
-            
-            options.forEach(opt => {
-                if (opt.value === '') return;
-                
-                const text = opt.textContent.toLowerCase();
-                if (text.includes(searchLower)) {
-                    opt.style.display = 'block';
-                    matchCount++;
-                } else {
-                    opt.style.display = 'none';
-                }
-            });
-            
-            if (matchCount > 0) {
-                showToast(`🔍 Tìm thấy ${matchCount} đơn hàng (client)`, 'info');
-            } else {
-                showToast('❌ Không tìm thấy đơn hàng', 'warning');
-            }
-        }
-
-        // Quick Filters
-        function addQuickFilters() {
-            const filterDiv = document.createElement('div');
-            filterDiv.className = 'quick-filters';
-            
-            const filters = [
-                { label: 'Tất cả', value: 'all' },
-                { label: 'Hôm nay', value: 'today' },
-                { label: '7 ngày qua', value: 'week' },
-                { label: 'Tháng này', value: 'month' }
-            ];
-            
-            filters.forEach(filter => {
-                const btn = document.createElement('button');
-                btn.textContent = filter.label;
-                btn.className = 'filter-btn';
-                btn.onclick = () => quickFilter(filter.value);
-                filterDiv.appendChild(btn);
-            });
-            
-            document.querySelector('.search-box').appendChild(filterDiv);
-        }
-
-        async function quickFilter(type) {
-            fetchOrders();
-        }
 
         // ==================== API FUNCTIONS ====================
         async function fetchOrders() {
