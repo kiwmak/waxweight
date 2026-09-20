@@ -1105,6 +1105,9 @@
             background: rgba(30, 30, 30, 0.98);
             border-top-color: #444;
         }
+        .product-combobox-input-wrap { flex: 1; min-width: 0; }
+        .product-combobox-input { width: 100%; box-sizing: border-box; padding: 12px 14px; border: 1px solid #ddd; border-radius: 10px; font-size: 15px; background: #fff; }
+        .product-combobox-input:focus { outline: none; border-color: #4CAF50; box-shadow: 0 0 0 3px rgba(76,175,80,.12); }
     </style>
 </head>
 <body>
@@ -1360,9 +1363,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-        .product-combobox-input-wrap { flex: 1; min-width: 0; }
-        .product-combobox-input { width: 100%; box-sizing: border-box; padding: 12px 14px; border: 1px solid #ddd; border-radius: 10px; font-size: 15px; background: #fff; }
-        .product-combobox-input:focus { outline: none; border-color: #4CAF50; box-shadow: 0 0 0 3px rgba(76,175,80,.12); }
     <script>
         const API_BASE = window.location.origin;
         
